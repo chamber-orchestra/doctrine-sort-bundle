@@ -1,0 +1,64 @@
+<?php
+
+declare(strict_types=1);
+
+/*
+ * This file is part of the ChamberOrchestra package.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace ChamberOrchestra\DoctrineSortBundle\Sort;
+
+use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\ChangeSet;
+use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Pair;
+use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Range;
+use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Update;
+use Ds\Vector;
+
+readonly class Sorter
+{
+    public function __construct(
+        private RepositoryFactory $factory
+    ) {
+    }
+
+    public function sort(ChangeSet $set): Vector
+    {
+        $er = $this->factory->getRepository($set->getClassMetadata(), $set->getConfiguration());
+        $result = new Vector();
+        /** @var Update $update */
+        foreach ($set as $update) {
+            foreach ($update->getRanges() as $range) {
+                $vector = $er->getCollection($update->getCondition(), $range->getMin(), $range->getMax());
+                $result = $result->merge($this->applyChanges($vector, $range));
+            }
+        }
+
+        return $result;
+    }
+
+    private function applyChanges(Vector $vector, Range $range): Vector
+    {
+        foreach ($range->getDeletions() as $deletion) {
+            $idx = \array_search($deletion, $vector->toArray());
+            $vector->remove($idx);
+        }
+
+        $base = \max(1, $range->getMin());
+        $length = \count($vector);
+        foreach ($range->getInsertions() as $insertion) {
+            $idx = \max(0, \min($insertion->order - $base, $length++));
+            $vector->insert($idx, $insertion);
+        }
+
+        $result = new Vector();
+        /** @var Pair $value */
+        foreach ($vector as $order => $value) {
+            $result[] = new Pair($value->id, $order + $base);
+        }
+
+        return $result;
+    }
+}

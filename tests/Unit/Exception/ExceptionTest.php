@@ -1,0 +1,29 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tests\Unit\Exception;
+
+use ChamberOrchestra\MetadataBundle\Exception\MappingException as MetadataMappingException;
+use ChamberOrchestra\DoctrineSortBundle\Exception\ExceptionInterface;
+use ChamberOrchestra\DoctrineSortBundle\Exception\MappingException;
+use ChamberOrchestra\DoctrineSortBundle\Exception\RuntimeException;
+use PHPUnit\Framework\TestCase;
+
+final class ExceptionTest extends TestCase
+{
+    public function testRuntimeExceptionImplementsInterface(): void
+    {
+        $exception = new RuntimeException('Boom');
+
+        self::assertInstanceOf(RuntimeException::class, $exception);
+        self::assertInstanceOf(ExceptionInterface::class, $exception);
+    }
+
+    public function testMappingExceptionExtendsMetadataException(): void
+    {
+        $exception = new MappingException('mapping');
+
+        self::assertInstanceOf(MetadataMappingException::class, $exception);
+    }
+}
