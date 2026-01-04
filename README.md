@@ -1,3 +1,5 @@
+[![PHP Composer](https://github.com/chamber-orchestra/doctrine-sort-bundle/actions/workflows/php.yml/badge.svg)](https://github.com/chamber-orchestra/doctrine-sort-bundle/actions/workflows/php.yml)
+
 # DoctrineSortBundle
 
 A Symfony bundle that keeps ordered entities consistent in Doctrine ORM by recalculating sort positions on flush. It uses metadata attributes to mark the sort field, supports optional grouping (e.g., per parent/category), and applies order corrections automatically.
