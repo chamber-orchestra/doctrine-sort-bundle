@@ -139,7 +139,7 @@ class SortDriver extends AbstractMappingDriver
     {
         if ($attr instanceof ManyToMany) {
             $property = $attr->mappedBy ?: $attr->inversedBy;
-        } elseif ($attr instanceof OneToOne || $attr instanceof OneToMany) {
+        } elseif ($attr instanceof OneToOne || $attr instanceof OneToMany || $attr instanceof ManyToOne) {
             $property = $attr->inversedBy;
         }
 

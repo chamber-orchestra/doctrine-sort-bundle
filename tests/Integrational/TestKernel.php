@@ -46,6 +46,7 @@ final class TestKernel extends Kernel
             'orm' => [
                 'second_level_cache' => [
                     'enabled' => true,
+                    'log_enabled' => true,
                 ],
                 'mappings' => [
                     'Tests' => [

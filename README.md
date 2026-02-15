@@ -1,17 +1,20 @@
 [![PHP Composer](https://github.com/chamber-orchestra/doctrine-sort-bundle/actions/workflows/php.yml/badge.svg)](https://github.com/chamber-orchestra/doctrine-sort-bundle/actions/workflows/php.yml)
+[![Latest Stable Version](https://poser.pugx.org/chamber-orchestra/doctrine-sort-bundle/v)](https://packagist.org/packages/chamber-orchestra/doctrine-sort-bundle)
+[![License](https://poser.pugx.org/chamber-orchestra/doctrine-sort-bundle/license)](https://packagist.org/packages/chamber-orchestra/doctrine-sort-bundle)
 
 # Doctrine Sort Bundle
 
-Automatic sort order management for Doctrine ORM entities in Symfony. The bundle recalculates sort positions on every flush, keeping your ordered lists consistent without manual reindexing. It uses PHP attributes to mark the sort field, supports grouped ordering (e.g., per parent or category), and handles insertions, deletions, and reordering transparently.
+Symfony bundle for automatic sort order management in Doctrine ORM entities. Recalculates sort positions on every `EntityManager::flush()`, keeping ordered lists consistent without manual reindexing. Uses PHP attributes to mark the sort field, supports grouped ordering (e.g., per parent or category), and handles insertions, deletions, and reordering transparently.
 
 ## Features
 
-- **Automatic reordering** — sort positions are recalculated on `EntityManager::flush()`, no manual gaps or renumbering needed
-- **Grouped sorting** — maintain independent sort orders per parent, category, or any other relation using `groupBy`
-- **Attribute-driven** — single `#[Sort]` attribute on your entity property, zero configuration required
-- **Drag-and-drop ready** — just set the new `sortOrder` value and flush; the bundle handles the rest
-- **Cache eviction** — optionally clear second-level cache collections and query regions on sort changes
-- **Provided traits** — `SortTrait` and `SortByParentTrait` for common use cases with convenience methods (`moveUp`, `moveDown`, `moveToBeginning`, `moveToEnd`)
+- **Automatic reordering** — sort positions are recalculated on flush, no manual gaps or renumbering needed
+- **Grouped sorting** — maintain independent sort orders per parent, category, or any relation via `groupBy`
+- **PHP attribute configuration** — single `#[Sort]` attribute on your entity property, zero YAML/XML config
+- **Drag-and-drop ready** — set the new position and flush; surrounding items shift automatically
+- **Second-level cache support** — works with Doctrine SLC; optionally evict cache collections and query regions on sort changes
+- **Change tracking policies** — compatible with both `DEFERRED_IMPLICIT` and `DEFERRED_EXPLICIT` tracking
+- **Provided traits** — `SortTrait` and `SortByParentTrait` with convenience methods (`moveUp`, `moveDown`, `moveToBeginning`, `moveToEnd`)
 
 ## Installation
 
@@ -126,7 +129,7 @@ class TodoItem implements SortInterface
 
 | Option | Type | Default | Description |
 |---|---|---|---|
-| `groupBy` | `array` | `[]` | Entity field names that define sort groups. Each unique combination of group values has its own sort sequence. |
+| `groupBy` | `array` | `[]` | Entity field names that define sort groups. Each unique combination of group values has its own sort sequence. Supports `Column`, `ManyToOne`, and `ManyToMany` fields. |
 | `evictCollections` | `array` | `[]` | Map of FQCN to collection field name. These Doctrine second-level cache collections are evicted when sort order changes. |
 | `evictRegions` | `array` | `[]` | Query cache region names to evict when sort order changes. |
 
@@ -136,17 +139,15 @@ class TodoItem implements SortInterface
 2. For each entity with a `#[Sort]` attribute that was inserted, updated, or deleted, it collects the changes
 3. Overlapping changes within the same group are merged into ranges to minimize database queries
 4. Affected entities are fetched, reordered in memory, and sort values are reassigned sequentially
-5. Doctrine's `recomputeSingleEntityChangeSet()` ensures the corrected values are persisted
+5. Doctrine's `recomputeSingleEntityChangeSet()` ensures the corrected values are persisted in the same flush
 
-This means you never need to manually manage gaps, shift items, or renumber sequences — just set the desired position and flush.
+This means you never need to manually manage gaps, shift items, or renumber sequences — just set the desired position and flush. Multiple reorder operations within a single flush or across multiple flushes in an explicit transaction are fully supported.
 
-## Dependencies
+## Compatibility
 
-- PHP ^8.5
-- Symfony 8.0
-- `chamber-orchestra/metadata-bundle` 8.0
-- `php-ds/php-ds` ^1.7
-- Doctrine ORM 3.6+ (via metadata-bundle)
+| Bundle | PHP | Symfony | Doctrine ORM |
+|---|---|---|---|
+| 8.0 | ^8.5 | 8.0 | 3.6+ |
 
 ## Running Tests
 

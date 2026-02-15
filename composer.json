@@ -1,7 +1,7 @@
 {
   "name": "chamber-orchestra/doctrine-sort-bundle",
   "type": "symfony-bundle",
-  "description": "Automatic sort order management for Doctrine ORM entities in Symfony. Maintains consistent position ordering with grouping support on flush.",
+  "description": "Symfony bundle for automatic sort order management in Doctrine ORM entities. Recalculates positions on flush with grouped ordering, second-level cache support, and PHP attribute configuration.",
   "keywords": [
     "symfony",
     "doctrine",
@@ -11,10 +11,13 @@
     "position",
     "orderable",
     "sortable",
+    "reorder",
     "doctrine-orm",
     "symfony-bundle",
     "entity-ordering",
-    "drag-and-drop"
+    "drag-and-drop",
+    "list-order",
+    "php-attributes"
   ],
   "license": "MIT",
   "homepage": "https://github.com/chamber-orchestra/doctrine-sort-bundle",
