@@ -71,7 +71,7 @@ class SortDriver extends AbstractMappingDriver
 
                 $annotations = \array_merge([Column::class], self::COLLECTION_ANNOTATIONS);
                 if (!$this->hasAnnotation($class, $group, $annotations)) {
-                    throw MappingException::missingAnnotation($className, $group, \implode(',', $annotations));
+                    throw MappingException::missingAttribute($className, $group, \implode(',', $annotations));
                 }
 
                 $collectionAnnotation = $this->getCollectionAnnotation($class, $group);

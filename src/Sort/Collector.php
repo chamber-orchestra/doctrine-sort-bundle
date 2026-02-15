@@ -63,7 +63,7 @@ readonly class Collector
 
     private function fixOrder(MetadataArgs $args, int|null $order, array $condition): int
     {
-        $meta = $args->classMetadata;
+        $meta = $args->getClassMetadata();
         /** @var SortConfiguration $config */
         $config = $args->configuration;
         $er = $this->factory->getRepository($meta, $config);

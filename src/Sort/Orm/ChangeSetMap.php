@@ -27,7 +27,7 @@ class ChangeSetMap implements \IteratorAggregate
         /** @var SortConfiguration $config */
         $config = $args->configuration;
 
-        return $this->map[$args->classMetadata->getName()] ??= new ChangeSet($args->classMetadata, $config);
+        return $this->map[$args->getClassMetadata()->getName()] ??= new ChangeSet($args->getClassMetadata(), $config);
     }
 
     public function getIterator(): \Traversable
