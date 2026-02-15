@@ -92,7 +92,7 @@ final class EntityRepositoryTest extends TestCase
             'entityName' => EntityRepositoryEntity::class,
         ]);
 
-        $expr = $this->createStub(Expr::class);
+        $expr = $this->createMock(Expr::class);
         $expr->method('isNull')->with('n.parent')->willReturn('n.parent IS NULL');
 
         $qb = $this->createMock(QueryBuilder::class);

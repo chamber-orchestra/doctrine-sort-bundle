@@ -42,7 +42,7 @@ final class CollectorTest extends TestCase
             'entityName' => CollectorEntity::class,
         ]);
 
-        $em = $this->createStub(EntityManagerInterface::class);
+        $em = $this->createMock(EntityManagerInterface::class);
         $em->method('getClassMetadata')->with(CollectorEntity::class)->willReturn($metadata);
 
         $extension = $this->createStub(ExtensionMetadataInterface::class);

@@ -1,15 +1,27 @@
 {
   "name": "chamber-orchestra/doctrine-sort-bundle",
-  "type": "library",
-  "description": "The symfony doctrine sort bundle",
+  "type": "symfony-bundle",
+  "description": "Automatic sort order management for Doctrine ORM entities in Symfony. Maintains consistent position ordering with grouping support on flush.",
   "keywords": [
     "symfony",
-    "doctrine-sort-bundle",
-    "doctrine-sort",
+    "doctrine",
     "sort",
-    "doctrine"
+    "sorting",
+    "sort-order",
+    "position",
+    "orderable",
+    "sortable",
+    "doctrine-orm",
+    "symfony-bundle",
+    "entity-ordering",
+    "drag-and-drop"
   ],
   "license": "MIT",
+  "homepage": "https://github.com/chamber-orchestra/doctrine-sort-bundle",
+  "support": {
+    "issues": "https://github.com/chamber-orchestra/doctrine-sort-bundle/issues",
+    "source": "https://github.com/chamber-orchestra/doctrine-sort-bundle"
+  },
   "authors": [
     {
       "name": "Andrew Lukin",
@@ -19,13 +31,14 @@
     }
   ],
   "require": {
-    "php": "^8.4",
+    "php": "^8.5",
     "chamber-orchestra/metadata-bundle": "8.0.*",
     "php-ds/php-ds": "^1.7"
   },
   "require-dev": {
-    "phpunit/phpunit": "^12.5",
-    "symfony/test-pack": "^1.2"
+    "phpunit/phpunit": "^13.0",
+    "symfony/test-pack": "^1.2",
+    "phpbench/phpbench": "^1.4"
   },
   "autoload": {
     "psr-4": {
@@ -53,6 +66,7 @@
     }
   },
   "scripts": {
-    "test": "vendor/bin/phpunit"
+    "test": "vendor/bin/phpunit",
+    "bench": "vendor/bin/phpbench run --report=aggregate"
   }
 }

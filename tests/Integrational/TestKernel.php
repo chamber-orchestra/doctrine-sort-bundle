@@ -44,6 +44,9 @@ final class TestKernel extends Kernel
                 'url' => 'sqlite:///:memory:',
             ],
             'orm' => [
+                'second_level_cache' => [
+                    'enabled' => true,
+                ],
                 'mappings' => [
                     'Tests' => [
                         'type' => 'attribute',

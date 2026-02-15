@@ -53,4 +53,24 @@ class GroupedSortableEntity implements SortInterface
     {
         $this->sortOrder = $sortOrder;
     }
+
+    public function moveUp(): void
+    {
+        $this->sortOrder = \max(1, $this->sortOrder - 1);
+    }
+
+    public function moveDown(): void
+    {
+        $this->sortOrder = $this->sortOrder + 1;
+    }
+
+    public function moveToBeginning(): void
+    {
+        $this->sortOrder = 1;
+    }
+
+    public function moveToEnd(): void
+    {
+        $this->sortOrder = 0;
+    }
 }

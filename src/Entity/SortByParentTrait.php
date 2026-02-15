@@ -17,14 +17,12 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(fields: ["parent", "sortOrder"])]
 trait SortByParentTrait
 {
+    use SortTrait;
+
     #[ORM\ManyToOne()]
     protected object|null $parent = null;
-    #[ORM\Column(type: 'integer', nullable: false, options: ['unsigned' => true])]
-    #[Dev\Sort(groupBy: ['parent'])]
-    protected int $sortOrder = PHP_INT_MAX;
 
-    public function getSortOrder(): int
-    {
-        return $this->sortOrder;
-    }
+    #[ORM\Column(type: 'integer', nullable: false, options: ['unsigned' => true, 'default' => 0])]
+    #[Dev\Sort(groupBy: ['parent'])]
+    protected int $sortOrder = 0;
 }

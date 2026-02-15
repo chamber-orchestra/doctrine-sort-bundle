@@ -67,7 +67,7 @@ final class SortSubscriberTest extends TestCase
             ->method('evictQueryRegion')
             ->with('region_a');
 
-        $em = $this->createStub(EntityManagerInterface::class);
+        $em = $this->createMock(EntityManagerInterface::class);
         $em->method('getCache')->willReturn($cache);
         $em->method('getClassMetadata')->with(SortSubscriberEntity::class)->willReturn($metadata);
 

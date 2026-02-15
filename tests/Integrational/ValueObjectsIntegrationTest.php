@@ -67,14 +67,12 @@ final class ValueObjectsIntegrationTest extends IntegrationTestCase
         };
 
         $sortInterfaceEntity = new class implements SortInterface {
-            public function getSortOrder(): int
-            {
-                return 5;
-            }
+            use SortTrait;
         };
+        $sortInterfaceEntity->setSortOrder(5);
 
-        self::assertSame(PHP_INT_MAX, $sortTraitEntity->getSortOrder());
-        self::assertSame(PHP_INT_MAX, $sortByParentEntity->getSortOrder());
+        self::assertSame(0, $sortTraitEntity->getSortOrder());
+        self::assertSame(0, $sortByParentEntity->getSortOrder());
         self::assertSame(5, $sortInterfaceEntity->getSortOrder());
     }
 

@@ -47,7 +47,7 @@ final class DiffHelperTest extends TestCase
             'group' => ['a', 'b'],
         ]);
 
-        $em = $this->createStub(EntityManagerInterface::class);
+        $em = $this->createMock(EntityManagerInterface::class);
         $em->method('getUnitOfWork')->willReturn($uow);
         $em->method('getClassMetadata')->with(DiffHelperEntity::class)->willReturn($metadata);
 

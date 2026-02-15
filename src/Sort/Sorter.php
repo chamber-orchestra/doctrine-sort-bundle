@@ -41,10 +41,11 @@ readonly class Sorter
 
     private function applyChanges(Vector $vector, Range $range): Vector
     {
+        $deleteIds = [];
         foreach ($range->getDeletions() as $deletion) {
-            $idx = \array_search($deletion, $vector->toArray());
-            $vector->remove($idx);
+            $deleteIds[$deletion->id] = true;
         }
+        $vector = $vector->filter(fn(Pair $pair) => !isset($deleteIds[$pair->id]));
 
         $base = \max(1, $range->getMin());
         $length = \count($vector);
