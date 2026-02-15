@@ -14,7 +14,7 @@ final class KernelWiringTest extends IntegrationTestCase
 {
     public function testBundleIsRegistered(): void
     {
-        $bundleClasses = \array_map(static fn($bundle) => $bundle::class, self::$kernel->getBundles());
+        $bundleClasses = \array_map(static fn ($bundle) => $bundle::class, self::$kernel->getBundles());
 
         self::assertContains(ChamberOrchestraDoctrineSortBundle::class, $bundleClasses);
     }

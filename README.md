@@ -1,6 +1,7 @@
 [![PHP Composer](https://github.com/chamber-orchestra/doctrine-sort-bundle/actions/workflows/php.yml/badge.svg)](https://github.com/chamber-orchestra/doctrine-sort-bundle/actions/workflows/php.yml)
 [![Latest Stable Version](https://poser.pugx.org/chamber-orchestra/doctrine-sort-bundle/v)](https://packagist.org/packages/chamber-orchestra/doctrine-sort-bundle)
 [![License](https://poser.pugx.org/chamber-orchestra/doctrine-sort-bundle/license)](https://packagist.org/packages/chamber-orchestra/doctrine-sort-bundle)
+[![Symfony 8.0](https://img.shields.io/badge/Symfony-8.0-purple.svg)](https://symfony.com)
 
 # Doctrine Sort Bundle
 
@@ -121,7 +122,7 @@ class TodoItem implements SortInterface
 #[Sort(
     groupBy: ['parent'],           // Fields that define independent sort groups
     evictCollections: [             // Second-level cache collections to evict on change
-        ParentEntity::class => 'children',
+        [ParentEntity::class, 'children'],
     ],
     evictRegions: ['my_query_region'], // Query cache regions to evict on change
 )]
@@ -130,7 +131,7 @@ class TodoItem implements SortInterface
 | Option | Type | Default | Description |
 |---|---|---|---|
 | `groupBy` | `array` | `[]` | Entity field names that define sort groups. Each unique combination of group values has its own sort sequence. Supports `Column`, `ManyToOne`, and `ManyToMany` fields. |
-| `evictCollections` | `array` | `[]` | Map of FQCN to collection field name. These Doctrine second-level cache collections are evicted when sort order changes. |
+| `evictCollections` | `array` | `[]` | List of `[FQCN, collectionField]` pairs. These Doctrine second-level cache collections are evicted when sort order changes. |
 | `evictRegions` | `array` | `[]` | Query cache region names to evict when sort order changes. |
 
 ## How It Works

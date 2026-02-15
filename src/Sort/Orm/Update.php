@@ -41,7 +41,7 @@ class Update
      */
     public function getRanges(): array
     {
-        $sort = fn(Pair $a, Pair $b): int => $a->order <=> $b->order;
+        $sort = fn (Pair $a, Pair $b): int => $a->order <=> $b->order;
         $insertions = $this->insertions;
         \usort($insertions, $sort);
 
@@ -67,7 +67,7 @@ class Update
      */
     private function getMatchedRange(array $ranges, ?Pair $insertion, ?Pair $deletion): ?Range
     {
-        return \array_find($ranges, fn(Range $range) => $range->contains($insertion, $deletion));
+        return \array_find($ranges, fn (Range $range) => $range->contains($insertion, $deletion));
 
     }
 }

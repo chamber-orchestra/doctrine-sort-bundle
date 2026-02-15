@@ -47,8 +47,7 @@ class SortSubscriber extends AbstractDoctrineListener
 
     public function __construct(
         private readonly Processor $processor = new Processor(),
-    )
-    {
+    ) {
     }
 
     public function onFlush(OnFlushEventArgs $args): void

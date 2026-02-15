@@ -21,8 +21,7 @@ readonly class Collector
     public function __construct(
         private RepositoryFactory $factory,
         private DiffHelper $helper
-    )
-    {
+    ) {
     }
 
     public function addUpdateIfNeeded(ChangeSetMap $map, MetadataArgs $args): void
