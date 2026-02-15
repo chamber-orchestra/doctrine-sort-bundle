@@ -58,15 +58,15 @@ final class ValueObjectsIntegrationTest extends IntegrationTestCase
 
         self::assertSame(32, \strlen($hash));
 
-        $sortTraitEntity = new class {
+        $sortTraitEntity = new class () {
             use SortTrait;
         };
 
-        $sortByParentEntity = new class {
+        $sortByParentEntity = new class () {
             use SortByParentTrait;
         };
 
-        $sortInterfaceEntity = new class implements SortInterface {
+        $sortInterfaceEntity = new class () implements SortInterface {
             use SortTrait;
         };
         $sortInterfaceEntity->setSortOrder(5);

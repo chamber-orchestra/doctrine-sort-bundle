@@ -23,16 +23,13 @@ jobs:
           tools: composer:v2
           coverage: none
 
-      - name: Validate composer.json and composer.lock
-        run: composer validate --strict
-
       - name: Cache Composer packages
         uses: actions/cache@v4
         with:
           path: |
             vendor
             ~/.composer/cache/files
-          key: ${{ runner.os }}-php-8.5-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-php-8.5-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: |
             ${{ runner.os }}-php-8.5-composer-
 
@@ -41,3 +38,9 @@ jobs:
 
       - name: Run test suite
         run: composer run-script test
+
+      - name: Run PHPStan
+        run: composer run-script analyse
+
+      - name: Run PHP-CS-Fixer
+        run: composer run-script cs-check

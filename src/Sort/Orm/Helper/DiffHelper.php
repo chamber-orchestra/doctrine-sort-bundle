@@ -71,7 +71,7 @@ readonly class DiffHelper
             return true;
         }
 
-        return \array_any($config->getGroupingFields(), fn($field) => isset($set[$field]));
+        return \array_any($config->getGroupingFields(), fn ($field) => isset($set[$field]));
 
     }
 }
