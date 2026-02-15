@@ -23,19 +23,19 @@ final class Sort implements MappingAttribute
         public array $evictRegions = []
     ) {
         foreach ($groupBy as $field) {
-            if (!is_string($field)) {
+            if (!\is_string($field)) {
                 throw new \InvalidArgumentException('Each "groupBy" element must be a string.');
             }
         }
 
         foreach ($evictCollections as $entry) {
-            if (!is_array($entry) || count($entry) !== 2 || !is_string($entry[0]) || !is_string($entry[1])) {
+            if (!\is_array($entry) || \count($entry) !== 2 || !\is_string($entry[0]) || !\is_string($entry[1])) {
                 throw new \InvalidArgumentException('Each "evictCollections" element must be a 2-element array of [string, string].');
             }
         }
 
         foreach ($evictRegions as $region) {
-            if (!is_string($region)) {
+            if (!\is_string($region)) {
                 throw new \InvalidArgumentException('Each "evictRegions" element must be a string.');
             }
         }
