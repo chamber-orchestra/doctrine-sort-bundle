@@ -33,7 +33,7 @@ readonly class DiffHelper
             return $set[$sortField];
         }
 
-        return [$value = $args->classMetadata->getFieldValue($entity, $sortField), $value];
+        return [$value = $args->getClassMetadata()->getFieldValue($entity, $sortField), $value];
     }
 
     public function getGroupingFieldChangeSet(MetadataArgs $args): array
@@ -53,7 +53,7 @@ readonly class DiffHelper
                 continue;
             }
 
-            $value = $args->classMetadata->getFieldValue($entity, $field);
+            $value = $args->getClassMetadata()->getFieldValue($entity, $field);
             $oldCondition[$field] = $newCondition[$field] = $value;
         }
 

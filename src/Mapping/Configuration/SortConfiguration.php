@@ -13,8 +13,9 @@ namespace ChamberOrchestra\DoctrineSortBundle\Mapping\Configuration;
 
 use ChamberOrchestra\DoctrineSortBundle\Exception\RuntimeException;
 use ChamberOrchestra\MetadataBundle\Mapping\ORM\AbstractMetadataConfiguration;
+use ChamberOrchestra\MetadataBundle\Mapping\ORM\EntityNameAwareInterface;
 
-class SortConfiguration extends AbstractMetadataConfiguration
+class SortConfiguration extends AbstractMetadataConfiguration implements EntityNameAwareInterface
 {
     public function getSortField(): string
     {
