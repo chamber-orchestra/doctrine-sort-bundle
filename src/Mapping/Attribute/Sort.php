@@ -15,7 +15,7 @@ use Attribute;
 use Doctrine\ORM\Mapping\MappingAttribute;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Sort implements MappingAttribute
+final readonly class Sort implements MappingAttribute
 {
     public function __construct(
         public array $groupBy = [],
