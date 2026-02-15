@@ -57,18 +57,23 @@ class SortSubscriber extends AbstractDoctrineListener
         $collector = null;
         $map = null;
 
-        foreach ($this->getScheduledEntityInsertions($em, $class = SortConfiguration::class) as $arg) {
-            ($collector ??= $this->getCollector($args))->addInsertion(($map ??= $this->getChangeSetMap($args)), $arg);
-        }
-        foreach ($this->getScheduledEntityUpdates($em, $class) as $arg) {
-            ($collector ??= $this->getCollector($args))->addUpdateIfNeeded(($map ??= $this->getChangeSetMap($args)), $arg);
-        }
-        foreach ($this->getScheduledEntityDeletions($em, $class) as $arg) {
-            ($collector ??= $this->getCollector($args))->addDeletion(($map ??= $this->getChangeSetMap($args)), $arg);
-        }
+        try {
+            foreach ($this->getScheduledEntityInsertions($em, $class = SortConfiguration::class) as $arg) {
+                ($collector ??= $this->getCollector($args))->addInsertion(($map ??= $this->getChangeSetMap($args)), $arg);
+            }
+            foreach ($this->getScheduledEntityUpdates($em, $class) as $arg) {
+                ($collector ??= $this->getCollector($args))->addUpdateIfNeeded(($map ??= $this->getChangeSetMap($args)), $arg);
+            }
+            foreach ($this->getScheduledEntityDeletions($em, $class) as $arg) {
+                ($collector ??= $this->getCollector($args))->addDeletion(($map ??= $this->getChangeSetMap($args)), $arg);
+            }
 
-        if (null !== $map) {
-            $this->recover($map, $args);
+            if (null !== $map) {
+                $this->recover($map, $args);
+            }
+        } catch (\Throwable $e) {
+            $this->clearState();
+            throw $e;
         }
     }
 
@@ -86,9 +91,15 @@ class SortSubscriber extends AbstractDoctrineListener
             }
         }
 
+        $this->clearState();
+    }
+
+    private function clearState(): void
+    {
         $this->changeSetMaps = [];
         $this->sorters = [];
         $this->collectors = [];
+        $this->repositoryFactory = [];
     }
 
     private function recover(ChangeSetMap $map, ManagerEventArgs $args): void

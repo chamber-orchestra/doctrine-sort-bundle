@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace ChamberOrchestra\DoctrineSortBundle\Sort\Repository;
 
+use ChamberOrchestra\DoctrineSortBundle\Exception\RuntimeException;
 use ChamberOrchestra\MetadataBundle\Mapping\ORM\MetadataConfigurationInterface;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Pair;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Util\Utils;
@@ -22,12 +23,24 @@ use Ds\Vector;
 class EntityRepository
 {
     private array $maxSortOrder = [];
+    private readonly string $identifierField;
 
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly ClassMetadata $metadata,
         private readonly MetadataConfigurationInterface $configuration,
     ) {
+        $identifiers = $metadata->getIdentifier();
+
+        if (\count($identifiers) !== 1) {
+            throw new RuntimeException(\sprintf(
+                'Entity "%s" must have exactly one identifier field, got %d. Composite primary keys are not supported.',
+                $metadata->getName(),
+                \count($identifiers),
+            ));
+        }
+
+        $this->identifierField = $identifiers[0];
     }
 
     public function getMaxSortOrder(array $condition, bool $increase = true): int
@@ -49,7 +62,7 @@ class EntityRepository
     public function getCollection(array $condition, int $min, int $max): Vector
     {
         $meta = $this->metadata;
-        $idField = \current($meta->getIdentifier());
+        $idField = $this->identifierField;
         $field = $this->configuration->getSortField();
 
         $qb = $this->createQueryBuilder('n');

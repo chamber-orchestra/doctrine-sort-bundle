@@ -13,4 +13,8 @@ namespace ChamberOrchestra\DoctrineSortBundle\Exception;
 
 class MappingException extends \ChamberOrchestra\MetadataBundle\Exception\MappingException
 {
+    public static function duplicateSortAttribute(string $className): self
+    {
+        return new self(\sprintf('Class "%s" has multiple #[Sort] attributes, but only one is allowed per entity.', $className));
+    }
 }

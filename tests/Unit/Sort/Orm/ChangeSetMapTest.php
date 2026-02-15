@@ -36,7 +36,7 @@ final class ChangeSetMapTest extends TestCase
             'entityName' => ChangeSetMapEntity::class,
         ]);
 
-        $em = $this->createStub(EntityManagerInterface::class);
+        $em = $this->createMock(EntityManagerInterface::class);
         $em->method('getClassMetadata')->with(ChangeSetMapEntity::class)->willReturn($metadata);
 
         $extension = $this->createStub(ExtensionMetadataInterface::class);

@@ -32,13 +32,13 @@ readonly class Collector
         }
 
         [$oldCondition, $newCondition] = $this->helper->getGroupingFieldChangeSet($args);
-        [$old, $new] = $this->helper->getSortFieldChangeSet($args);
+        [$oldOrder, $newOrder] = $this->helper->getSortFieldChangeSet($args);
 
-        $new = $this->fixOrder($args, $new, $newCondition);
+        $newOrder = $this->fixOrder($args, $newOrder, $newCondition);
 
         $set = $map->getChangeSet($args);
-        $set->addDeletion($args->entity, $old, $oldCondition);
-        $set->addInsertion($args->entity, $new, $newCondition);
+        $set->addDeletion($args->entity, $oldOrder, $oldCondition);
+        $set->addInsertion($args->entity, $newOrder, $newCondition);
     }
 
     public function addInsertion(ChangeSetMap $map, MetadataArgs $args): void

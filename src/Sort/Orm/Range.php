@@ -30,7 +30,7 @@ class Range
     {
         [$min, $max] = $this->range($insertion, $deletion);
 
-        // increase ranges by one to build to process ranges as [x,y][y+1,z]
+        // Expand boundaries by one to merge adjacent ranges as [x,y][y+1,z]
         $x = $this->min - 1;
         $y = $this->max + 1;
 

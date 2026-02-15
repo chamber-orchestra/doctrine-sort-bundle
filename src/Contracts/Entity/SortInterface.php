@@ -14,4 +14,6 @@ namespace ChamberOrchestra\DoctrineSortBundle\Contracts\Entity;
 interface SortInterface
 {
     public function getSortOrder(): int;
+
+    public function setSortOrder(int $sortOrder): void;
 }
