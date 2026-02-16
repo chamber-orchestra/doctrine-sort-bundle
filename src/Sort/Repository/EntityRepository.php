@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace ChamberOrchestra\DoctrineSortBundle\Sort\Repository;
 
 use ChamberOrchestra\DoctrineSortBundle\Exception\RuntimeException;
-use ChamberOrchestra\MetadataBundle\Mapping\ORM\MetadataConfigurationInterface;
+use ChamberOrchestra\DoctrineSortBundle\Mapping\Configuration\SortConfiguration;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Pair;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,13 +22,14 @@ use Ds\Vector;
 
 class EntityRepository
 {
+    /** @var array<string, int> */
     private array $maxSortOrder = [];
     private readonly string $identifierField;
 
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly ClassMetadata $metadata,
-        private readonly MetadataConfigurationInterface $configuration,
+        ClassMetadata $metadata,
+        private readonly SortConfiguration $configuration,
     ) {
         $identifiers = $metadata->getIdentifier();
 
@@ -56,12 +57,14 @@ class EntityRepository
 
         $this->addGroupingCondition($qb, $condition);
 
-        return $this->maxSortOrder[$hash] = (int)$qb->getQuery()->getSingleScalarResult();
+        return $this->maxSortOrder[$hash] = (int) $qb->getQuery()->getSingleScalarResult();
     }
 
+    /**
+     * @return Vector<Pair>
+     */
     public function getCollection(array $condition, int $min, int $max): Vector
     {
-        $meta = $this->metadata;
         $idField = $this->identifierField;
         $field = $this->configuration->getSortField();
 
@@ -75,12 +78,18 @@ class EntityRepository
             ->setParameter('right', $max)
             ->orderBy(\sprintf('n.%s', $field), 'ASC');
 
-        return new Vector($qb->getQuery()->useQueryCache(true)->getResult());
+        /** @var list<Pair> $result */
+        $result = $qb->getQuery()->useQueryCache(true)->getResult();
+
+        return new Vector($result);
     }
 
     private function createQueryBuilder(string $alias): QueryBuilder
     {
-        return $this->em->createQueryBuilder()->from($this->configuration->getEntityName(), $alias);
+        /** @var class-string $entityName */
+        $entityName = $this->configuration->getEntityName();
+
+        return $this->em->createQueryBuilder()->from($entityName, $alias);
     }
 
     private function addGroupingCondition(QueryBuilder $qb, array $condition): void

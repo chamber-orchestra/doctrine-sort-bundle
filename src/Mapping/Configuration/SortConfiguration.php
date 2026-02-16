@@ -21,40 +21,50 @@ class SortConfiguration extends AbstractMetadataConfiguration implements EntityN
     {
         $this->assertMapped();
 
-        return \array_key_first($this->mappings);
+        /** @var string $key */
+        $key = \array_key_first($this->mappings);
+
+        return $key;
     }
 
+    /**
+     * @return list<string>
+     */
     public function getGroupingFields(): array
     {
-        return $this->getMappingValue('groupBy');
+        return $this->getFirstMapping()['groupBy'];
     }
 
+    /**
+     * @return list<array{0: string, 1: string}>
+     */
     public function getEvictCacheCollections(): array
     {
-        return $this->getMappingValue('evictCollections');
+        return $this->getFirstMapping()['evictCollections'];
     }
 
+    /**
+     * @return list<string>
+     */
     public function getEvictCacheRegions(): array
     {
-        return $this->getMappingValue('evictRegions');
+        return $this->getFirstMapping()['evictRegions'];
     }
 
     public function getEntityName(): string
     {
-        return $this->getMappingValue('entityName');
+        return $this->getFirstMapping()['entityName'];
     }
 
-    private function getMappingValue(string $key): mixed
+    /**
+     * @return array{groupBy: list<string>, evictCollections: list<array{0: string, 1: string}>, evictRegions: list<string>, entityName: string, sort: true}
+     */
+    private function getFirstMapping(): array
     {
         $this->assertMapped();
 
-        $mapping = \current($this->mappings);
-
-        if (!\array_key_exists($key, $mapping)) {
-            throw new RuntimeException(\sprintf('Sort mapping is missing required key "%s".', $key));
-        }
-
-        return $mapping[$key];
+        /** @var array{groupBy: list<string>, evictCollections: list<array{0: string, 1: string}>, evictRegions: list<string>, entityName: string, sort: true} */
+        return \current($this->mappings);
     }
 
     private function assertMapped(): void

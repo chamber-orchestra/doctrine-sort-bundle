@@ -36,13 +36,16 @@ class SortSubscriber extends AbstractDoctrineListener
      */
     private array $collectors = [];
     /**
-     * @var array<class-string, ChangeSetMap<ChangeSet>>
+     * @var array<class-string, ChangeSetMap>
      */
     private array $changeSetMaps = [];
     /**
      * @var array<class-string, Sorter>
      */
     private array $sorters = [];
+    /**
+     * @var array<class-string, RepositoryFactory>
+     */
     private array $repositoryFactory = [];
 
     public function __construct(
@@ -79,7 +82,6 @@ class SortSubscriber extends AbstractDoctrineListener
     public function postFlush(PostFlushEventArgs $args): void
     {
         if (null !== $cache = $args->getObjectManager()->getCache()) {
-            /** @var ChangeSet $changeSet */
             foreach ($this->getChangeSetMap($args) as $changeSet) {
                 foreach ($changeSet->getConfiguration()->getEvictCacheCollections() as $collection) {
                     $cache->evictCollectionRegion($collection[0], $collection[1]);

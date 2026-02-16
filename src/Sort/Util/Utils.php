@@ -25,7 +25,7 @@ class Utils
                 $parts[] = 'a:' . \serialize($value);
             } elseif (\is_object($value)) {
                 $parts[] = 'o:' . \spl_object_hash($value);
-            } else {
+            } elseif (\is_scalar($value)) {
                 $parts[] = 's:' . $value;
             }
         }

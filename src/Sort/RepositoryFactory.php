@@ -18,6 +18,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 
 class RepositoryFactory
 {
+    /** @var array<string, EntityRepository> */
     private array $map = [];
 
     public function __construct(
