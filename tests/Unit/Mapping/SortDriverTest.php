@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Mapping;
 
-use ChamberOrchestra\MetadataBundle\Mapping\ORM\ExtensionMetadata;
-use ChamberOrchestra\MetadataBundle\Reader\AttributeReader;
-use ChamberOrchestra\MetadataBundle\Exception\MappingException;
 use ChamberOrchestra\DoctrineSortBundle\Mapping\Attribute\Sort;
 use ChamberOrchestra\DoctrineSortBundle\Mapping\Configuration\SortConfiguration;
 use ChamberOrchestra\DoctrineSortBundle\Mapping\Driver\SortDriver;
+use ChamberOrchestra\MetadataBundle\Exception\MappingException;
+use ChamberOrchestra\MetadataBundle\Mapping\ORM\ExtensionMetadata;
+use ChamberOrchestra\MetadataBundle\Reader\AttributeReader;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Persistence\Mapping\RuntimeReflectionService;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\Persistence\Mapping\RuntimeReflectionService;
 use PHPUnit\Framework\TestCase;
 
 #[ORM\Entity]

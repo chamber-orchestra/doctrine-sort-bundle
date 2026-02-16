@@ -14,7 +14,6 @@ namespace ChamberOrchestra\DoctrineSortBundle\Sort;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\ChangeSet;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Pair;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Range;
-use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Update;
 use Ds\Vector;
 
 readonly class Sorter
@@ -44,6 +43,7 @@ readonly class Sorter
 
     /**
      * @param Vector<Pair> $vector
+     *
      * @return Vector<Pair>
      */
     private function applyChanges(Vector $vector, Range $range): Vector

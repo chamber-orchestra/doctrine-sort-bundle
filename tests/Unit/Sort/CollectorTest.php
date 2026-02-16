@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Sort;
 
-use ChamberOrchestra\MetadataBundle\Helper\MetadataArgs;
-use ChamberOrchestra\MetadataBundle\Mapping\ExtensionMetadataInterface;
 use ChamberOrchestra\DoctrineSortBundle\Mapping\Configuration\SortConfiguration;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Collector;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\ChangeSetMap;
+use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Helper\DiffHelper;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Update;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Repository\EntityRepository;
 use ChamberOrchestra\DoctrineSortBundle\Sort\RepositoryFactory;
-use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Helper\DiffHelper;
+use ChamberOrchestra\MetadataBundle\Helper\MetadataArgs;
+use ChamberOrchestra\MetadataBundle\Mapping\ExtensionMetadataInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\Mapping\RuntimeReflectionService;

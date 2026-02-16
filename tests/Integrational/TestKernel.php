@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace Tests\Integrational;
 
-use ChamberOrchestra\MetadataBundle\ChamberOrchestraMetadataBundle;
 use ChamberOrchestra\DoctrineSortBundle\ChamberOrchestraDoctrineSortBundle;
+use ChamberOrchestra\MetadataBundle\ChamberOrchestraMetadataBundle;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;

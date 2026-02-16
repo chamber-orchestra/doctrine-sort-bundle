@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Integrational;
 
-use ChamberOrchestra\MetadataBundle\Mapping\ORM\ExtensionMetadata;
-use ChamberOrchestra\MetadataBundle\Mapping\MetadataReader;
-use ChamberOrchestra\MetadataBundle\Reader\AttributeReader;
 use ChamberOrchestra\DoctrineSortBundle\Mapping\Attribute\Sort;
 use ChamberOrchestra\DoctrineSortBundle\Mapping\Configuration\SortConfiguration;
 use ChamberOrchestra\DoctrineSortBundle\Mapping\Driver\SortDriver;
+use ChamberOrchestra\MetadataBundle\Mapping\MetadataReader;
+use ChamberOrchestra\MetadataBundle\Mapping\ORM\ExtensionMetadata;
+use ChamberOrchestra\MetadataBundle\Reader\AttributeReader;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\Mapping\RuntimeReflectionService;
 use Tests\Fixtures\Entity\GroupedSortableEntity;

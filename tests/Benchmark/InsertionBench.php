@@ -33,7 +33,7 @@ class InsertionBench extends SortBenchmark
     {
         $em = $this->getEntityManager();
 
-        for ($i = 1; $i <= $params['size']; $i++) {
+        for ($i = 1; $i <= $params['size']; ++$i) {
             $em->persist(new SimpleSortableEntity($i));
         }
 
@@ -54,7 +54,7 @@ class InsertionBench extends SortBenchmark
     public function benchInsertAtMiddle(array $params): void
     {
         $em = $this->getEntityManager();
-        $middle = (int) ceil($params['size'] / 2);
+        $middle = (int) \ceil($params['size'] / 2);
         $em->persist(new SimpleSortableEntity($params['size'] + 1, $middle));
         $em->flush();
     }
@@ -64,7 +64,7 @@ class InsertionBench extends SortBenchmark
         $this->setUp();
         $em = $this->getEntityManager();
 
-        for ($i = 1; $i <= $params['size']; $i++) {
+        for ($i = 1; $i <= $params['size']; ++$i) {
             $em->persist(new SimpleSortableEntity($i));
         }
 

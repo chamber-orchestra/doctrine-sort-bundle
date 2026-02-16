@@ -51,6 +51,7 @@ readonly class Processor
 
     /**
      * @param Vector<Pair> $vector
+     *
      * @return array<int|string, object>
      */
     private function loadEntities(EntityManagerInterface $em, ClassMetadata $meta, string $idField, Vector $vector): array

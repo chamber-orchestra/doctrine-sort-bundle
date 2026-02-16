@@ -35,7 +35,7 @@ readonly class DiffHelper
         $sortField = $config->getSortField();
 
         if (isset($set[$sortField])) {
-            /** @var array{0: int|null, 1: int|null} */
+            /* @var array{0: int|null, 1: int|null} */
             return $set[$sortField];
         }
 
@@ -89,6 +89,5 @@ readonly class DiffHelper
         }
 
         return \array_any($config->getGroupingFields(), fn (string $field) => isset($set[$field]));
-
     }
 }
