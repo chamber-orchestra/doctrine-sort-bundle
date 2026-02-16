@@ -1,5 +1,5 @@
 parameters:
-    level: 6
+    level: max
     paths:
         - src
     ignoreErrors:
@@ -9,27 +9,3 @@ parameters:
         -
             identifier: argument.type
             message: '#ObjectManager given#'
-        -
-            identifier: offsetAssign.valueType
-            path: src/Sort/Sorter.php
-        -
-            identifier: return.unusedType
-            path: src/Mapping/Driver/SortDriver.php
-        -
-            identifier: notIdentical.alwaysTrue
-            path: src/Mapping/Driver/SortDriver.php
-        -
-            identifier: deadCode.unreachable
-            path: src/Mapping/Driver/SortDriver.php
-        -
-            identifier: variable.undefined
-            path: src/Mapping/Driver/SortDriver.php
-        -
-            identifier: property.notFound
-            path: src/Mapping/Driver/SortDriver.php
-        -
-            identifier: offsetAccess.nonArray
-            path: src/Sort/Orm/Helper/DiffHelper.php
-        -
-            identifier: method.notFound
-            path: src/Sort/Repository/EntityRepository.php

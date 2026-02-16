@@ -13,7 +13,9 @@ namespace ChamberOrchestra\DoctrineSortBundle\Sort\Orm;
 
 class Update
 {
+    /** @var list<Pair> */
     private array $insertions = [];
+    /** @var list<Pair> */
     private array $deletions = [];
 
     public function __construct(
@@ -51,7 +53,9 @@ class Update
         $ranges = [];
         $count = \max(\count($deletions), \count($insertions));
         for ($i = 0; $i < $count; ++$i) {
-            $range = $this->getMatchedRange($ranges, $ins = ($insertions[$i] ?? null), $del = ($deletions[$i] ?? null));
+            $ins = $insertions[$i] ?? null;
+            $del = $deletions[$i] ?? null;
+            $range = $this->getMatchedRange($ranges, $ins, $del);
             if (null !== $range) {
                 $range->add($ins, $del);
                 continue;

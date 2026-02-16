@@ -36,7 +36,7 @@ readonly class Collector
         $newOrder = $this->fixOrder($args, $newOrder, $newCondition);
 
         $set = $map->getChangeSet($args);
-        $set->addDeletion($args->entity, $oldOrder, $oldCondition);
+        $set->addDeletion($args->entity, $oldOrder ?? 0, $oldCondition);
         $set->addInsertion($args->entity, $newOrder, $newCondition);
     }
 
@@ -57,9 +57,12 @@ readonly class Collector
         [$condition,] = $this->helper->getGroupingFieldChangeSet($args);
 
         $set = $map->getChangeSet($args);
-        $set->addDeletion($args->entity, $order, $condition);
+        $set->addDeletion($args->entity, $order ?? 0, $condition);
     }
 
+    /**
+     * @param array<string, mixed> $condition
+     */
     private function fixOrder(MetadataArgs $args, int|null $order, array $condition): int
     {
         $meta = $args->getClassMetadata();

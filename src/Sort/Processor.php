@@ -20,6 +20,9 @@ use Ds\Vector;
 
 readonly class Processor
 {
+    /**
+     * @param Vector<Pair> $vector
+     */
     public function setCorrectOrder(EntityManagerInterface $em, ChangeSet $set, Vector $vector): void
     {
         if ($vector->isEmpty()) {
@@ -47,10 +50,12 @@ readonly class Processor
     }
 
     /**
+     * @param Vector<Pair> $vector
      * @return array<int|string, object>
      */
     private function loadEntities(EntityManagerInterface $em, ClassMetadata $meta, string $idField, Vector $vector): array
     {
+        /** @var list<int|string> $ids */
         $ids = [];
         /** @var Pair $pair */
         foreach ($vector as $pair) {
@@ -59,18 +64,25 @@ readonly class Processor
 
         // Batch-load existing entities from database (1 query instead of N)
         $dql = \sprintf('SELECT e FROM %s e WHERE e.%s IN (:ids)', $meta->getName(), $idField);
+        /** @var list<object> $result */
         $result = $em->createQuery($dql)->setParameter('ids', $ids)->getResult();
 
+        /** @var array<int|string, object> $map */
         $map = [];
         foreach ($result as $entity) {
-            $map[$meta->getFieldValue($entity, $idField)] = $entity;
+            /** @var int|string $id */
+            $id = $meta->getFieldValue($entity, $idField);
+            $map[$id] = $entity;
         }
 
         // Newly persisted entities (scheduled for insertion) are not yet in the database.
         // Fall back to the identity map via find() — this is a cheap in-memory lookup.
         foreach ($ids as $id) {
             if (!isset($map[$id])) {
-                $map[$id] = $em->find($meta->getName(), $id);
+                $entity = $em->find($meta->getName(), $id);
+                if (null !== $entity) {
+                    $map[$id] = $entity;
+                }
             }
         }
 

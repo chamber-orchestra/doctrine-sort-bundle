@@ -24,11 +24,14 @@ readonly class Sorter
     ) {
     }
 
+    /**
+     * @return Vector<Pair>
+     */
     public function sort(ChangeSet $set): Vector
     {
         $er = $this->factory->getRepository($set->getClassMetadata(), $set->getConfiguration());
+        /** @var Vector<Pair> $result */
         $result = new Vector();
-        /** @var Update $update */
         foreach ($set as $update) {
             foreach ($update->getRanges() as $range) {
                 $vector = $er->getCollection($update->getCondition(), $range->getMin(), $range->getMax());
@@ -39,13 +42,17 @@ readonly class Sorter
         return $result;
     }
 
+    /**
+     * @param Vector<Pair> $vector
+     * @return Vector<Pair>
+     */
     private function applyChanges(Vector $vector, Range $range): Vector
     {
         $deleteIds = [];
         foreach ($range->getDeletions() as $deletion) {
             $deleteIds[$deletion->id] = true;
         }
-        $vector = $vector->filter(fn (Pair $pair) => !isset($deleteIds[$pair->id]));
+        $vector = $vector->filter(fn (Pair $pair): bool => !isset($deleteIds[$pair->id]));
 
         $base = \max(1, $range->getMin());
         $length = \count($vector);
@@ -54,8 +61,8 @@ readonly class Sorter
             $vector->insert($idx, $insertion);
         }
 
+        /** @var Vector<Pair> $result */
         $result = new Vector();
-        /** @var Pair $value */
         foreach ($vector as $order => $value) {
             $result[] = new Pair($value->id, $order + $base);
         }
