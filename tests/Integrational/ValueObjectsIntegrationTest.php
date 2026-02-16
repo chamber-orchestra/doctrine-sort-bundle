@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Integrational;
 
-use ChamberOrchestra\MetadataBundle\Helper\MetadataArgs;
 use ChamberOrchestra\DoctrineSortBundle\Contracts\Entity\SortInterface;
 use ChamberOrchestra\DoctrineSortBundle\Entity\SortByParentTrait;
 use ChamberOrchestra\DoctrineSortBundle\Entity\SortTrait;
@@ -17,6 +16,7 @@ use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Pair;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Range;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Update;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Util\Utils;
+use ChamberOrchestra\MetadataBundle\Helper\MetadataArgs;
 use Tests\Fixtures\Entity\GroupedSortableEntity;
 
 final class ValueObjectsIntegrationTest extends IntegrationTestCase
@@ -58,15 +58,15 @@ final class ValueObjectsIntegrationTest extends IntegrationTestCase
 
         self::assertSame(32, \strlen($hash));
 
-        $sortTraitEntity = new class () {
+        $sortTraitEntity = new class {
             use SortTrait;
         };
 
-        $sortByParentEntity = new class () {
+        $sortByParentEntity = new class {
             use SortByParentTrait;
         };
 
-        $sortInterfaceEntity = new class () implements SortInterface {
+        $sortInterfaceEntity = new class implements SortInterface {
             use SortTrait;
         };
         $sortInterfaceEntity->setSortOrder(5);

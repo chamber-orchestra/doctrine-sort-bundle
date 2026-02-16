@@ -13,7 +13,6 @@ namespace ChamberOrchestra\DoctrineSortBundle\EventSubscriber;
 
 use ChamberOrchestra\DoctrineSortBundle\Mapping\Configuration\SortConfiguration;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Collector;
-use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\ChangeSet;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\ChangeSetMap;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Helper\DiffHelper;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Processor;
@@ -61,13 +60,13 @@ class SortSubscriber extends AbstractDoctrineListener
 
         try {
             foreach ($this->getScheduledEntityInsertions($em, $class = SortConfiguration::class) as $arg) {
-                ($collector ??= $this->getCollector($args))->addInsertion(($map ??= $this->getChangeSetMap($args)), $arg);
+                ($collector ??= $this->getCollector($args))->addInsertion($map ??= $this->getChangeSetMap($args), $arg);
             }
             foreach ($this->getScheduledEntityUpdates($em, $class) as $arg) {
-                ($collector ??= $this->getCollector($args))->addUpdateIfNeeded(($map ??= $this->getChangeSetMap($args)), $arg);
+                ($collector ??= $this->getCollector($args))->addUpdateIfNeeded($map ??= $this->getChangeSetMap($args), $arg);
             }
             foreach ($this->getScheduledEntityDeletions($em, $class) as $arg) {
-                ($collector ??= $this->getCollector($args))->addDeletion(($map ??= $this->getChangeSetMap($args)), $arg);
+                ($collector ??= $this->getCollector($args))->addDeletion($map ??= $this->getChangeSetMap($args), $arg);
             }
 
             if (null !== $map) {

@@ -11,10 +11,9 @@ declare(strict_types=1);
 
 namespace ChamberOrchestra\DoctrineSortBundle\Mapping\Attribute;
 
-use Attribute;
 use Doctrine\ORM\Mapping\MappingAttribute;
 
-#[Attribute(Attribute::TARGET_PROPERTY)]
+#[\Attribute(\Attribute::TARGET_PROPERTY)]
 final readonly class Sort implements MappingAttribute
 {
     public function __construct(
@@ -29,7 +28,7 @@ final readonly class Sort implements MappingAttribute
         }
 
         foreach ($evictCollections as $entry) {
-            if (!\is_array($entry) || \count($entry) !== 2 || !\is_string($entry[0]) || !\is_string($entry[1])) {
+            if (!\is_array($entry) || 2 !== \count($entry) || !\is_string($entry[0]) || !\is_string($entry[1])) {
                 throw new \InvalidArgumentException('Each "evictCollections" element must be a 2-element array of [string, string].');
             }
         }

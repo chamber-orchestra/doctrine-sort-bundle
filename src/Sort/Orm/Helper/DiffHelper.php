@@ -89,6 +89,5 @@ readonly class DiffHelper
         }
 
         return \array_any($config->getGroupingFields(), fn (string $field) => isset($set[$field]));
-
     }
 }

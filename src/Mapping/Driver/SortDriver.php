@@ -11,12 +11,12 @@ declare(strict_types=1);
 
 namespace ChamberOrchestra\DoctrineSortBundle\Mapping\Driver;
 
-use ChamberOrchestra\MetadataBundle\Mapping\Driver\AbstractMappingDriver;
-use ChamberOrchestra\MetadataBundle\Mapping\ExtensionMetadataInterface;
-use ChamberOrchestra\MetadataBundle\Mapping\ORM\ExtensionMetadata;
 use ChamberOrchestra\DoctrineSortBundle\Exception\MappingException;
 use ChamberOrchestra\DoctrineSortBundle\Mapping\Attribute\Sort;
 use ChamberOrchestra\DoctrineSortBundle\Mapping\Configuration\SortConfiguration;
+use ChamberOrchestra\MetadataBundle\Mapping\Driver\AbstractMappingDriver;
+use ChamberOrchestra\MetadataBundle\Mapping\ExtensionMetadataInterface;
+use ChamberOrchestra\MetadataBundle\Mapping\ORM\ExtensionMetadata;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\ManyToMany;
@@ -101,7 +101,7 @@ class SortDriver extends AbstractMappingDriver
         $extensionMetadata->addConfiguration($config);
     }
 
-    protected function getPropertyAttribute(): string|null
+    protected function getPropertyAttribute(): ?string
     {
         return Sort::class;
     }

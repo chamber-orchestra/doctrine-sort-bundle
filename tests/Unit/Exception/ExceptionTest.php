@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Exception;
 
-use ChamberOrchestra\MetadataBundle\Exception\MappingException as MetadataMappingException;
 use ChamberOrchestra\DoctrineSortBundle\Exception\ExceptionInterface;
 use ChamberOrchestra\DoctrineSortBundle\Exception\MappingException;
 use ChamberOrchestra\DoctrineSortBundle\Exception\RuntimeException;
+use ChamberOrchestra\MetadataBundle\Exception\MappingException as MetadataMappingException;
 use PHPUnit\Framework\TestCase;
 
 final class ExceptionTest extends TestCase

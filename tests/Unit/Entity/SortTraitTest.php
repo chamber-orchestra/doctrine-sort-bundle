@@ -13,7 +13,7 @@ final class SortTraitTest extends TestCase
 {
     public function testSortTraitDefaultOrder(): void
     {
-        $entity = new class () {
+        $entity = new class {
             use SortTrait;
         };
 
@@ -22,7 +22,7 @@ final class SortTraitTest extends TestCase
 
     public function testSortByParentTraitDefaultOrder(): void
     {
-        $entity = new class () {
+        $entity = new class {
             use SortByParentTrait;
         };
 
@@ -31,7 +31,7 @@ final class SortTraitTest extends TestCase
 
     public function testSortInterfaceContract(): void
     {
-        $entity = new class () implements SortInterface {
+        $entity = new class implements SortInterface {
             use SortTrait;
         };
 
@@ -42,7 +42,7 @@ final class SortTraitTest extends TestCase
 
     public function testMoveUpDecrementsOrder(): void
     {
-        $entity = new class () {
+        $entity = new class {
             use SortTrait;
         };
 
@@ -54,7 +54,7 @@ final class SortTraitTest extends TestCase
 
     public function testMoveUpClampsAtOne(): void
     {
-        $entity = new class () {
+        $entity = new class {
             use SortTrait;
         };
 
@@ -66,7 +66,7 @@ final class SortTraitTest extends TestCase
 
     public function testMoveDownIncrementsOrder(): void
     {
-        $entity = new class () {
+        $entity = new class {
             use SortTrait;
         };
 
@@ -78,7 +78,7 @@ final class SortTraitTest extends TestCase
 
     public function testMoveToBeginning(): void
     {
-        $entity = new class () {
+        $entity = new class {
             use SortTrait;
         };
 
@@ -90,7 +90,7 @@ final class SortTraitTest extends TestCase
 
     public function testMoveToEnd(): void
     {
-        $entity = new class () {
+        $entity = new class {
             use SortTrait;
         };
 
@@ -102,7 +102,7 @@ final class SortTraitTest extends TestCase
 
     public function testSortByParentTraitInheritsMethods(): void
     {
-        $entity = new class () {
+        $entity = new class {
             use SortByParentTrait;
         };
 

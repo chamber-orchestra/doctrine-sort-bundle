@@ -44,7 +44,7 @@ class ReorderBench extends SortBenchmark
     public function benchDeleteMiddle(array $params): void
     {
         $em = $this->getEntityManager();
-        $middle = (int) ceil($params['size'] / 2);
+        $middle = (int) \ceil($params['size'] / 2);
         $entity = $em->find(SimpleSortableEntity::class, $middle);
         $em->remove($entity);
         $em->flush();
@@ -55,7 +55,7 @@ class ReorderBench extends SortBenchmark
         $this->setUp();
         $em = $this->getEntityManager();
 
-        for ($i = 1; $i <= $params['size']; $i++) {
+        for ($i = 1; $i <= $params['size']; ++$i) {
             $em->persist(new SimpleSortableEntity($i));
         }
 

@@ -72,6 +72,5 @@ class Update
     private function getMatchedRange(array $ranges, ?Pair $insertion, ?Pair $deletion): ?Range
     {
         return \array_find($ranges, fn (Range $range) => $range->contains($insertion, $deletion));
-
     }
 }

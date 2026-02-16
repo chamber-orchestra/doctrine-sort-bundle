@@ -28,7 +28,7 @@ class GroupedBench extends SortBenchmark
     {
         $em = $this->getEntityManager();
 
-        for ($i = 1; $i <= $params['size']; $i++) {
+        for ($i = 1; $i <= $params['size']; ++$i) {
             $group = self::GROUPS[$i % \count(self::GROUPS)];
             $em->persist(new GroupedSortableEntity($i, $group));
         }
@@ -50,7 +50,7 @@ class GroupedBench extends SortBenchmark
         $this->setUp();
         $em = $this->getEntityManager();
 
-        for ($i = 1; $i <= $params['size']; $i++) {
+        for ($i = 1; $i <= $params['size']; ++$i) {
             $group = self::GROUPS[$i % \count(self::GROUPS)];
             $em->persist(new GroupedSortableEntity($i, $group));
         }

@@ -20,13 +20,13 @@ class Utils
             if (null === $value) {
                 $parts[] = 'n';
             } elseif ($value instanceof \DateTimeInterface) {
-                $parts[] = 'd:' . $value->format('c');
+                $parts[] = 'd:'.$value->format('c');
             } elseif (\is_array($value)) {
-                $parts[] = 'a:' . \serialize($value);
+                $parts[] = 'a:'.\serialize($value);
             } elseif (\is_object($value)) {
-                $parts[] = 'o:' . \spl_object_hash($value);
+                $parts[] = 'o:'.\spl_object_hash($value);
             } elseif (\is_scalar($value)) {
-                $parts[] = 's:' . $value;
+                $parts[] = 's:'.$value;
             }
         }
 

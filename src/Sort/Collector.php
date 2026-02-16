@@ -53,8 +53,8 @@ readonly class Collector
 
     public function addDeletion(ChangeSetMap $map, MetadataArgs $args): void
     {
-        [$order,] = $this->helper->getSortFieldChangeSet($args);
-        [$condition,] = $this->helper->getGroupingFieldChangeSet($args);
+        [$order] = $this->helper->getSortFieldChangeSet($args);
+        [$condition] = $this->helper->getGroupingFieldChangeSet($args);
 
         $set = $map->getChangeSet($args);
         $set->addDeletion($args->entity, $order ?? 0, $condition);
@@ -63,7 +63,7 @@ readonly class Collector
     /**
      * @param array<string, mixed> $condition
      */
-    private function fixOrder(MetadataArgs $args, int|null $order, array $condition): int
+    private function fixOrder(MetadataArgs $args, ?int $order, array $condition): int
     {
         $meta = $args->getClassMetadata();
         /** @var SortConfiguration $config */

@@ -33,12 +33,8 @@ class ChangeSet implements \IteratorAggregate
     ) {
         $identifiers = $classMetadata->getIdentifier();
 
-        if (\count($identifiers) !== 1) {
-            throw new RuntimeException(\sprintf(
-                'Entity "%s" must have exactly one identifier field, got %d. Composite primary keys are not supported.',
-                $classMetadata->getName(),
-                \count($identifiers),
-            ));
+        if (1 !== \count($identifiers)) {
+            throw new RuntimeException(\sprintf('Entity "%s" must have exactly one identifier field, got %d. Composite primary keys are not supported.', $classMetadata->getName(), \count($identifiers)));
         }
 
         $this->identifierField = $identifiers[0];
