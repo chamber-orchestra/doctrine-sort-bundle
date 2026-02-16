@@ -28,6 +28,7 @@ return (new PhpCsFixer\Config())
             'scope' => 'all',
             'strict' => true,
         ],
+        'phpdoc_to_comment' => ['ignored_tags' => ['var']],
     ])
     ->setFinder($finder)
     ->setRiskyAllowed(true)
