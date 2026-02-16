@@ -1,7 +1,9 @@
 [![PHP Composer](https://github.com/chamber-orchestra/doctrine-sort-bundle/actions/workflows/php.yml/badge.svg)](https://github.com/chamber-orchestra/doctrine-sort-bundle/actions/workflows/php.yml)
+[![codecov](https://codecov.io/gh/chamber-orchestra/doctrine-sort-bundle/graph/badge.svg)](https://codecov.io/gh/chamber-orchestra/doctrine-sort-bundle)
+[![PHPStan](https://img.shields.io/badge/PHPStan-level%206-brightgreen)](https://phpstan.org/)
 [![Latest Stable Version](https://poser.pugx.org/chamber-orchestra/doctrine-sort-bundle/v)](https://packagist.org/packages/chamber-orchestra/doctrine-sort-bundle)
 [![License](https://poser.pugx.org/chamber-orchestra/doctrine-sort-bundle/license)](https://packagist.org/packages/chamber-orchestra/doctrine-sort-bundle)
-[![Symfony 8.0](https://img.shields.io/badge/Symfony-8.0-purple.svg)](https://symfony.com)
+![Symfony 8](https://img.shields.io/badge/Symfony-8-purple?logo=symfony)
 
 # Doctrine Sort Bundle
 
