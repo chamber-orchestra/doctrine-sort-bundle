@@ -15,21 +15,35 @@ use ChamberOrchestra\DoctrineSortBundle\Mapping\Configuration\SortConfiguration;
 use ChamberOrchestra\MetadataBundle\Helper\MetadataArgs;
 use Ds\Map;
 
+/**
+ * @implements \IteratorAggregate<string, ChangeSet>
+ */
 class ChangeSetMap implements \IteratorAggregate
 {
-    public function __construct(
-        private Map $map = new Map()
-    ) {
+    /** @var Map<string, ChangeSet> */
+    private Map $map;
+
+    public function __construct()
+    {
+        $this->map = new Map();
     }
 
     public function getChangeSet(MetadataArgs $args): ChangeSet
     {
         /** @var SortConfiguration $config */
         $config = $args->configuration;
+        $key = $args->getClassMetadata()->getName();
 
-        return $this->map[$args->classMetadata->getName()] ??= new ChangeSet($args->classMetadata, $config);
+        if (!$this->map->hasKey($key)) {
+            $this->map->put($key, new ChangeSet($args->getClassMetadata(), $config));
+        }
+
+        return $this->map->get($key);
     }
 
+    /**
+     * @return \Traversable<string, ChangeSet>
+     */
     public function getIterator(): \Traversable
     {
         return $this->map;

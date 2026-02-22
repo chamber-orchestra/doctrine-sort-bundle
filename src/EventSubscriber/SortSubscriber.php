@@ -13,7 +13,6 @@ namespace ChamberOrchestra\DoctrineSortBundle\EventSubscriber;
 
 use ChamberOrchestra\DoctrineSortBundle\Mapping\Configuration\SortConfiguration;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Collector;
-use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\ChangeSet;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\ChangeSetMap;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Helper\DiffHelper;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Processor;
@@ -36,19 +35,21 @@ class SortSubscriber extends AbstractDoctrineListener
      */
     private array $collectors = [];
     /**
-     * @var array<class-string, ChangeSetMap<ChangeSet>>
+     * @var array<class-string, ChangeSetMap>
      */
     private array $changeSetMaps = [];
     /**
      * @var array<class-string, Sorter>
      */
     private array $sorters = [];
+    /**
+     * @var array<class-string, RepositoryFactory>
+     */
     private array $repositoryFactory = [];
 
     public function __construct(
         private readonly Processor $processor = new Processor(),
-    )
-    {
+    ) {
     }
 
     public function onFlush(OnFlushEventArgs $args): void
@@ -57,25 +58,29 @@ class SortSubscriber extends AbstractDoctrineListener
         $collector = null;
         $map = null;
 
-        foreach ($this->getScheduledEntityInsertions($em, $class = SortConfiguration::class) as $arg) {
-            ($collector ??= $this->getCollector($args))->addInsertion(($map ??= $this->getChangeSetMap($args)), $arg);
-        }
-        foreach ($this->getScheduledEntityUpdates($em, $class) as $arg) {
-            ($collector ??= $this->getCollector($args))->addUpdateIfNeeded(($map ??= $this->getChangeSetMap($args)), $arg);
-        }
-        foreach ($this->getScheduledEntityDeletions($em, $class) as $arg) {
-            ($collector ??= $this->getCollector($args))->addDeletion(($map ??= $this->getChangeSetMap($args)), $arg);
-        }
+        try {
+            foreach ($this->getScheduledEntityInsertions($em, $class = SortConfiguration::class) as $arg) {
+                ($collector ??= $this->getCollector($args))->addInsertion($map ??= $this->getChangeSetMap($args), $arg);
+            }
+            foreach ($this->getScheduledEntityUpdates($em, $class) as $arg) {
+                ($collector ??= $this->getCollector($args))->addUpdateIfNeeded($map ??= $this->getChangeSetMap($args), $arg);
+            }
+            foreach ($this->getScheduledEntityDeletions($em, $class) as $arg) {
+                ($collector ??= $this->getCollector($args))->addDeletion($map ??= $this->getChangeSetMap($args), $arg);
+            }
 
-        if (null !== $map) {
-            $this->recover($map, $args);
+            if (null !== $map) {
+                $this->recover($map, $args);
+            }
+        } catch (\Throwable $e) {
+            $this->clearState();
+            throw $e;
         }
     }
 
     public function postFlush(PostFlushEventArgs $args): void
     {
         if (null !== $cache = $args->getObjectManager()->getCache()) {
-            /** @var ChangeSet $changeSet */
             foreach ($this->getChangeSetMap($args) as $changeSet) {
                 foreach ($changeSet->getConfiguration()->getEvictCacheCollections() as $collection) {
                     $cache->evictCollectionRegion($collection[0], $collection[1]);
@@ -86,9 +91,15 @@ class SortSubscriber extends AbstractDoctrineListener
             }
         }
 
+        $this->clearState();
+    }
+
+    private function clearState(): void
+    {
         $this->changeSetMaps = [];
         $this->sorters = [];
         $this->collectors = [];
+        $this->repositoryFactory = [];
     }
 
     private function recover(ChangeSetMap $map, ManagerEventArgs $args): void

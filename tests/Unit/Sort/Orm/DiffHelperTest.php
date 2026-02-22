@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Sort\Orm;
 
-use ChamberOrchestra\MetadataBundle\Helper\MetadataArgs;
-use ChamberOrchestra\MetadataBundle\Mapping\ExtensionMetadataInterface;
 use ChamberOrchestra\DoctrineSortBundle\Mapping\Configuration\SortConfiguration;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Helper\DiffHelper;
+use ChamberOrchestra\MetadataBundle\Helper\MetadataArgs;
+use ChamberOrchestra\MetadataBundle\Mapping\ExtensionMetadataInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\UnitOfWork;
@@ -47,7 +47,7 @@ final class DiffHelperTest extends TestCase
             'group' => ['a', 'b'],
         ]);
 
-        $em = $this->createStub(EntityManagerInterface::class);
+        $em = $this->createMock(EntityManagerInterface::class);
         $em->method('getUnitOfWork')->willReturn($uow);
         $em->method('getClassMetadata')->with(DiffHelperEntity::class)->willReturn($metadata);
 

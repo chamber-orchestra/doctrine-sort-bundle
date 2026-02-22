@@ -18,7 +18,9 @@ class Range
     private const int MAX_INT = 2147483647;
     private int $min = self::MAX_INT;
     private int $max = 0;
+    /** @var list<Pair> */
     private array $deletions = [];
+    /** @var list<Pair> */
     private array $insertions = [];
 
     public function __construct(?Pair $insertion, ?Pair $deletion)
@@ -30,7 +32,7 @@ class Range
     {
         [$min, $max] = $this->range($insertion, $deletion);
 
-        // increase ranges by one to build to process ranges as [x,y][y+1,z]
+        // Expand boundaries by one to merge adjacent ranges as [x,y][y+1,z]
         $x = $this->min - 1;
         $y = $this->max + 1;
 
@@ -57,27 +59,23 @@ class Range
     }
 
     /**
-     * @return Pair[]
+     * @return list<Pair>
      */
     public function getDeletions(): array
     {
         $values = $this->deletions;
-        \usort($values, function (Pair $a, Pair $b): int {
-            return $b->order <=> $a->order;
-        });
+        \usort($values, fn (Pair $a, Pair $b): int => $b->order <=> $a->order);
 
         return $values;
     }
 
     /**
-     * @return Pair[]
+     * @return list<Pair>
      */
     public function getInsertions(): array
     {
         $values = $this->insertions;
-        \usort($values, function (Pair $a, Pair $b): int {
-            return $a->order <=> $b->order;
-        });
+        \usort($values, fn (Pair $a, Pair $b): int => $a->order <=> $b->order);
 
         return $values;
     }
@@ -99,15 +97,18 @@ class Range
         }
     }
 
+    /**
+     * @return array{0: int, 1: int}
+     */
     private function range(?Pair $insertion, ?Pair $deletion): array
     {
         $this->assert($insertion, $deletion);
 
         if (null === $insertion || null === $deletion) {
-            return [
-                null === $insertion ? $deletion->order : $insertion->order,
-                self::MAX_INT,
-            ];
+            /** @var Pair $pair */
+            $pair = $insertion ?? $deletion;
+
+            return [$pair->order, self::MAX_INT];
         }
 
         return [

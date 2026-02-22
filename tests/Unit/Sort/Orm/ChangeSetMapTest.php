@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Sort\Orm;
 
-use ChamberOrchestra\MetadataBundle\Helper\MetadataArgs;
-use ChamberOrchestra\MetadataBundle\Mapping\ExtensionMetadataInterface;
 use ChamberOrchestra\DoctrineSortBundle\Mapping\Configuration\SortConfiguration;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\ChangeSetMap;
+use ChamberOrchestra\MetadataBundle\Helper\MetadataArgs;
+use ChamberOrchestra\MetadataBundle\Mapping\ExtensionMetadataInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\Mapping\RuntimeReflectionService;
@@ -36,7 +36,7 @@ final class ChangeSetMapTest extends TestCase
             'entityName' => ChangeSetMapEntity::class,
         ]);
 
-        $em = $this->createStub(EntityManagerInterface::class);
+        $em = $this->createMock(EntityManagerInterface::class);
         $em->method('getClassMetadata')->with(ChangeSetMapEntity::class)->willReturn($metadata);
 
         $extension = $this->createStub(ExtensionMetadataInterface::class);

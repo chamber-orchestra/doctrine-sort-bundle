@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Tests\Integrational;
 
-use ChamberOrchestra\MetadataBundle\Helper\MetadataArgs;
-use ChamberOrchestra\MetadataBundle\Mapping\MetadataReader;
 use ChamberOrchestra\DoctrineSortBundle\Mapping\Configuration\SortConfiguration;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Collector;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\ChangeSet;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\ChangeSetMap;
-use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Pair;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Helper\DiffHelper;
+use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Pair;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Processor;
 use ChamberOrchestra\DoctrineSortBundle\Sort\RepositoryFactory;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Sorter;
+use ChamberOrchestra\MetadataBundle\Helper\MetadataArgs;
+use ChamberOrchestra\MetadataBundle\Mapping\MetadataReader;
 use Ds\Vector;
 use Tests\Fixtures\Entity\GroupedSortableEntity;
 

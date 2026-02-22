@@ -10,9 +10,9 @@ use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\ChangeSetMap;
 use ChamberOrchestra\MetadataBundle\Helper\MetadataArgs;
 use ChamberOrchestra\MetadataBundle\Mapping\ExtensionMetadataInterface;
 use Doctrine\ORM\Cache;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\PostFlushEventArgs;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\Mapping\RuntimeReflectionService;
 use PHPUnit\Framework\TestCase;
 
@@ -67,7 +67,7 @@ final class SortSubscriberTest extends TestCase
             ->method('evictQueryRegion')
             ->with('region_a');
 
-        $em = $this->createStub(EntityManagerInterface::class);
+        $em = $this->createMock(EntityManagerInterface::class);
         $em->method('getCache')->willReturn($cache);
         $em->method('getClassMetadata')->with(SortSubscriberEntity::class)->willReturn($metadata);
 
@@ -81,7 +81,6 @@ final class SortSubscriberTest extends TestCase
         $this->setPrivateProperty($subscriber, 'changeSetMaps', [\get_class($em) => $map]);
 
         $subscriber->postFlush(new PostFlushEventArgs($em));
-
     }
 
     private function setPrivateProperty(object $subject, string $property, mixed $value): void

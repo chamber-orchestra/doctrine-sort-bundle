@@ -21,8 +21,7 @@ readonly class Collector
     public function __construct(
         private RepositoryFactory $factory,
         private DiffHelper $helper
-    )
-    {
+    ) {
     }
 
     public function addUpdateIfNeeded(ChangeSetMap $map, MetadataArgs $args): void
@@ -32,13 +31,13 @@ readonly class Collector
         }
 
         [$oldCondition, $newCondition] = $this->helper->getGroupingFieldChangeSet($args);
-        [$old, $new] = $this->helper->getSortFieldChangeSet($args);
+        [$oldOrder, $newOrder] = $this->helper->getSortFieldChangeSet($args);
 
-        $new = $this->fixOrder($args, $new, $newCondition);
+        $newOrder = $this->fixOrder($args, $newOrder, $newCondition);
 
         $set = $map->getChangeSet($args);
-        $set->addDeletion($args->entity, $old, $oldCondition);
-        $set->addInsertion($args->entity, $new, $newCondition);
+        $set->addDeletion($args->entity, $oldOrder ?? 0, $oldCondition);
+        $set->addInsertion($args->entity, $newOrder, $newCondition);
     }
 
     public function addInsertion(ChangeSetMap $map, MetadataArgs $args): void
@@ -54,16 +53,19 @@ readonly class Collector
 
     public function addDeletion(ChangeSetMap $map, MetadataArgs $args): void
     {
-        [$order,] = $this->helper->getSortFieldChangeSet($args);
-        [$condition,] = $this->helper->getGroupingFieldChangeSet($args);
+        [$order] = $this->helper->getSortFieldChangeSet($args);
+        [$condition] = $this->helper->getGroupingFieldChangeSet($args);
 
         $set = $map->getChangeSet($args);
-        $set->addDeletion($args->entity, $order, $condition);
+        $set->addDeletion($args->entity, $order ?? 0, $condition);
     }
 
-    private function fixOrder(MetadataArgs $args, int|null $order, array $condition): int
+    /**
+     * @param array<string, mixed> $condition
+     */
+    private function fixOrder(MetadataArgs $args, ?int $order, array $condition): int
     {
-        $meta = $args->classMetadata;
+        $meta = $args->getClassMetadata();
         /** @var SortConfiguration $config */
         $config = $args->configuration;
         $er = $this->factory->getRepository($meta, $config);

@@ -11,19 +11,16 @@ declare(strict_types=1);
 
 namespace ChamberOrchestra\DoctrineSortBundle\Mapping\Driver;
 
-use ChamberOrchestra\MetadataBundle\Mapping\Driver\AbstractMappingDriver;
-use ChamberOrchestra\MetadataBundle\Mapping\ExtensionMetadataInterface;
-use ChamberOrchestra\MetadataBundle\Mapping\ORM\ExtensionMetadata;
 use ChamberOrchestra\DoctrineSortBundle\Exception\MappingException;
 use ChamberOrchestra\DoctrineSortBundle\Mapping\Attribute\Sort;
 use ChamberOrchestra\DoctrineSortBundle\Mapping\Configuration\SortConfiguration;
+use ChamberOrchestra\MetadataBundle\Mapping\Driver\AbstractMappingDriver;
+use ChamberOrchestra\MetadataBundle\Mapping\ExtensionMetadataInterface;
+use ChamberOrchestra\MetadataBundle\Mapping\ORM\ExtensionMetadata;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
-use Doctrine\ORM\Mapping\MappingAttribute;
-use Doctrine\ORM\Mapping\OneToMany;
-use Doctrine\ORM\Mapping\OneToOne;
 
 class SortDriver extends AbstractMappingDriver
 {
@@ -40,62 +37,78 @@ class SortDriver extends AbstractMappingDriver
         $rootEntityName = $meta->rootEntityName;
         $entityName = $meta->name;
 
+        $sortProperty = null;
+        $sortAttr = null;
+
         foreach ($class->getProperties() as $property) {
             /** @var Sort $attr */
             if (null === $attr = $this->reader->getPropertyAttribute($property, Sort::class)) {
                 continue;
             }
 
-            $groups = $attr->groupBy;
-            $collections = [];
-            if (\count($groups)) {
-                foreach ($groups as $group) {
-                    if (!$class->hasProperty($group)) {
-                        throw MappingException::missingProperty($className, $group, $property->getName());
-                    }
-
-                    $annotations = \array_merge([Column::class], self::COLLECTION_ANNOTATIONS);
-                    if (!$this->hasAnnotation($class, $group, $annotations)) {
-                        throw MappingException::missingAnnotation($className, $group, \implode(',', $annotations));
-                    }
-
-                    $collectionAnnotation = $this->getCollectionAnnotation($class, $group);
-                    if (null !== $collectionAnnotation) {
-                        $collection = $this->getTargetCollection($class, $collectionAnnotation);
-                        if (null !== $collection) {
-                            $collections[] = $collection;
-                        }
-                    }
-                }
+            if (null !== $sortProperty) {
+                throw MappingException::duplicateSortAttribute($className);
             }
 
-            $declaringEntityName = $entityName;
-            if ($inheritanceType !== $meta::INHERITANCE_TYPE_NONE) {
-                if (\is_a($rootEntityName, $property->getDeclaringClass()->getName(), true)) {
-                    $declaringEntityName = $rootEntityName;
-                }
-            }
+            $sortProperty = $property;
+            $sortAttr = $attr;
+        }
 
-            $config = new SortConfiguration();
-            $config->mapField($property->getName(), [
-                'sort' => true,
-                'groupBy' => $groups,
-                'evictCollections' => \array_merge($attr->evictCollections, $collections),
-                'evictRegions' => \array_merge($attr->evictRegions, []),
-                'entityName' => $declaringEntityName,
-            ]);
-
-            $extensionMetadata->addConfiguration($config);
-
+        if (null === $sortProperty || null === $sortAttr) {
             return;
         }
+
+        /** @var list<string> $groups */
+        $groups = $sortAttr->groupBy;
+        $collections = [];
+        if (\count($groups)) {
+            foreach ($groups as $group) {
+                if (!$class->hasProperty($group)) {
+                    throw MappingException::missingProperty($className, $group, $sortProperty->getName());
+                }
+
+                $annotations = \array_merge([Column::class], self::COLLECTION_ANNOTATIONS);
+                if (!$this->hasAnnotation($class, $group, $annotations)) {
+                    throw MappingException::missingAttribute($className, $group, \implode(',', $annotations));
+                }
+
+                $collectionAnnotation = $this->getCollectionAnnotation($class, $group);
+                if (null !== $collectionAnnotation) {
+                    $collection = $this->getTargetCollection($class, $collectionAnnotation);
+                    if (null !== $collection) {
+                        $collections[] = $collection;
+                    }
+                }
+            }
+        }
+
+        $declaringEntityName = $entityName;
+        if ($inheritanceType !== $meta::INHERITANCE_TYPE_NONE) {
+            if (\is_a($rootEntityName, $sortProperty->getDeclaringClass()->getName(), true)) {
+                $declaringEntityName = $rootEntityName;
+            }
+        }
+
+        $config = new SortConfiguration();
+        $config->mapField($sortProperty->getName(), [
+            'sort' => true,
+            'groupBy' => $groups,
+            'evictCollections' => \array_merge($sortAttr->evictCollections, $collections),
+            'evictRegions' => \array_merge($sortAttr->evictRegions, []),
+            'entityName' => $declaringEntityName,
+        ]);
+
+        $extensionMetadata->addConfiguration($config);
     }
 
-    protected function getPropertyAnnotation(): string|null
+    protected function getPropertyAttribute(): ?string
     {
         return Sort::class;
     }
 
+    /**
+     * @param list<class-string> $annotations
+     */
     private function hasAnnotation(\ReflectionClass $class, string $field, array $annotations): bool
     {
         $groupProperty = $class->getProperty($field);
@@ -109,13 +122,12 @@ class SortDriver extends AbstractMappingDriver
         return false;
     }
 
-    private function getCollectionAnnotation(\ReflectionClass $class, string $field): MappingAttribute|null
+    private function getCollectionAnnotation(\ReflectionClass $class, string $field): ManyToMany|ManyToOne|null
     {
         $property = $class->getProperty($field);
         foreach (self::COLLECTION_ANNOTATIONS as $annotation) {
-            /** @var MappingAttribute $value */
             $value = $this->reader->getPropertyAttribute($property, $annotation);
-            if (null !== $value) {
+            if ($value instanceof ManyToMany || $value instanceof ManyToOne) {
                 return $value;
             }
         }
@@ -123,11 +135,14 @@ class SortDriver extends AbstractMappingDriver
         return null;
     }
 
-    private function getTargetCollection(\ReflectionClass $rootClass, MappingAttribute $attr): ?array
+    /**
+     * @return array{0: string, 1: string}|null
+     */
+    private function getTargetCollection(\ReflectionClass $rootClass, ManyToMany|ManyToOne $attr): ?array
     {
         if ($attr instanceof ManyToMany) {
             $property = $attr->mappedBy ?: $attr->inversedBy;
-        } elseif ($attr instanceof OneToOne || $attr instanceof OneToMany) {
+        } else {
             $property = $attr->inversedBy;
         }
 
@@ -135,12 +150,16 @@ class SortDriver extends AbstractMappingDriver
             return null;
         }
 
-        $class = $attr->targetEntity;
+        $targetEntity = $attr->targetEntity;
 
-        if (!\str_contains($class, '\\')) {
-            $class = $rootClass->getNamespaceName().'\\'.$class;
+        if (null === $targetEntity) {
+            return null;
         }
 
-        return [$class, $property];
+        if (!\str_contains($targetEntity, '\\')) {
+            $targetEntity = $rootClass->getNamespaceName().'\\'.$targetEntity;
+        }
+
+        return [$targetEntity, $property];
     }
 }

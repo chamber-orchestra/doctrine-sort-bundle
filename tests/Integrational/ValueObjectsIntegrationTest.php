@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Integrational;
 
-use ChamberOrchestra\MetadataBundle\Helper\MetadataArgs;
 use ChamberOrchestra\DoctrineSortBundle\Contracts\Entity\SortInterface;
 use ChamberOrchestra\DoctrineSortBundle\Entity\SortByParentTrait;
 use ChamberOrchestra\DoctrineSortBundle\Entity\SortTrait;
@@ -17,6 +16,7 @@ use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Pair;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Range;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Update;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Util\Utils;
+use ChamberOrchestra\MetadataBundle\Helper\MetadataArgs;
 use Tests\Fixtures\Entity\GroupedSortableEntity;
 
 final class ValueObjectsIntegrationTest extends IntegrationTestCase
@@ -67,14 +67,12 @@ final class ValueObjectsIntegrationTest extends IntegrationTestCase
         };
 
         $sortInterfaceEntity = new class implements SortInterface {
-            public function getSortOrder(): int
-            {
-                return 5;
-            }
+            use SortTrait;
         };
+        $sortInterfaceEntity->setSortOrder(5);
 
-        self::assertSame(PHP_INT_MAX, $sortTraitEntity->getSortOrder());
-        self::assertSame(PHP_INT_MAX, $sortByParentEntity->getSortOrder());
+        self::assertSame(0, $sortTraitEntity->getSortOrder());
+        self::assertSame(0, $sortByParentEntity->getSortOrder());
         self::assertSame(5, $sortInterfaceEntity->getSortOrder());
     }
 

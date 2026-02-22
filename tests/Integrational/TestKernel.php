@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace Tests\Integrational;
 
-use ChamberOrchestra\MetadataBundle\ChamberOrchestraMetadataBundle;
 use ChamberOrchestra\DoctrineSortBundle\ChamberOrchestraDoctrineSortBundle;
+use ChamberOrchestra\MetadataBundle\ChamberOrchestraMetadataBundle;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
@@ -44,6 +44,10 @@ final class TestKernel extends Kernel
                 'url' => 'sqlite:///:memory:',
             ],
             'orm' => [
+                'second_level_cache' => [
+                    'enabled' => true,
+                    'log_enabled' => true,
+                ],
                 'mappings' => [
                     'Tests' => [
                         'type' => 'attribute',

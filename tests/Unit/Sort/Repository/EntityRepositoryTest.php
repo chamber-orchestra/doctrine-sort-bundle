@@ -9,8 +9,8 @@ use ChamberOrchestra\DoctrineSortBundle\Sort\Repository\EntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\Mapping\RuntimeReflectionService;
 use PHPUnit\Framework\TestCase;
 
@@ -92,7 +92,7 @@ final class EntityRepositoryTest extends TestCase
             'entityName' => EntityRepositoryEntity::class,
         ]);
 
-        $expr = $this->createStub(Expr::class);
+        $expr = $this->createMock(Expr::class);
         $expr->method('isNull')->with('n.parent')->willReturn('n.parent IS NULL');
 
         $qb = $this->createMock(QueryBuilder::class);

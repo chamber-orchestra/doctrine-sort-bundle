@@ -15,19 +15,21 @@ class Utils
 {
     public static function hash(array $values): string
     {
-        $hash = '';
+        $parts = [];
         foreach ($values as $value) {
-            if ($value instanceof \DateTimeInterface) {
-                $value = $value->format('c');
+            if (null === $value) {
+                $parts[] = 'n';
+            } elseif ($value instanceof \DateTimeInterface) {
+                $parts[] = 'd:'.$value->format('c');
             } elseif (\is_array($value)) {
-                $value = \serialize($value);
+                $parts[] = 'a:'.\serialize($value);
             } elseif (\is_object($value)) {
-                $value = \spl_object_hash($value);
+                $parts[] = 'o:'.\spl_object_hash($value);
+            } elseif (\is_scalar($value)) {
+                $parts[] = 's:'.$value;
             }
-
-            $hash .= $value;
         }
 
-        return \md5($hash);
+        return \hash('xxh128', \implode('|', $parts));
     }
 }

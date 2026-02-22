@@ -14,7 +14,7 @@ namespace ChamberOrchestra\DoctrineSortBundle\Sort\Orm;
 readonly class Pair
 {
     public function __construct(
-        public mixed $id,
+        public int|string $id,
         public int $order
     ) {
     }

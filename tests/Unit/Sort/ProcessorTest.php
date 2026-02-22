@@ -48,10 +48,13 @@ final class ProcessorTest extends TestCase
             ->method('recomputeSingleEntityChangeSet')
             ->with($metadata, $entity);
 
+        $query = $this->createMock(\Doctrine\ORM\Query::class);
+        $query->method('setParameter')->willReturnSelf();
+        $query->method('getResult')->willReturn([$entity]);
+
         $em = $this->createMock(EntityManagerInterface::class);
         $em->method('getUnitOfWork')->willReturn($uow);
-        $em->method('find')->with(ProcessorEntity::class, 1)->willReturn($entity);
-        $em->expects(self::once())->method('persist')->with($entity);
+        $em->method('createQuery')->willReturn($query);
 
         $vector = new Vector([new Pair(1, 5)]);
 

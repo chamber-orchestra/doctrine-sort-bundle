@@ -14,7 +14,6 @@ namespace ChamberOrchestra\DoctrineSortBundle\Sort;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\ChangeSet;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Pair;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Range;
-use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Update;
 use Ds\Vector;
 
 readonly class Sorter
@@ -24,11 +23,14 @@ readonly class Sorter
     ) {
     }
 
+    /**
+     * @return Vector<Pair>
+     */
     public function sort(ChangeSet $set): Vector
     {
         $er = $this->factory->getRepository($set->getClassMetadata(), $set->getConfiguration());
+        /** @var Vector<Pair> $result */
         $result = new Vector();
-        /** @var Update $update */
         foreach ($set as $update) {
             foreach ($update->getRanges() as $range) {
                 $vector = $er->getCollection($update->getCondition(), $range->getMin(), $range->getMax());
@@ -39,12 +41,18 @@ readonly class Sorter
         return $result;
     }
 
+    /**
+     * @param Vector<Pair> $vector
+     *
+     * @return Vector<Pair>
+     */
     private function applyChanges(Vector $vector, Range $range): Vector
     {
+        $deleteIds = [];
         foreach ($range->getDeletions() as $deletion) {
-            $idx = \array_search($deletion, $vector->toArray());
-            $vector->remove($idx);
+            $deleteIds[$deletion->id] = true;
         }
+        $vector = $vector->filter(fn (Pair $pair): bool => !isset($deleteIds[$pair->id]));
 
         $base = \max(1, $range->getMin());
         $length = \count($vector);
@@ -53,8 +61,8 @@ readonly class Sorter
             $vector->insert($idx, $insertion);
         }
 
+        /** @var Vector<Pair> $result */
         $result = new Vector();
-        /** @var Pair $value */
         foreach ($vector as $order => $value) {
             $result[] = new Pair($value->id, $order + $base);
         }

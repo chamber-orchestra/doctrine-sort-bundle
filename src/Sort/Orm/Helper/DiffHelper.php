@@ -22,28 +22,44 @@ readonly class DiffHelper
     ) {
     }
 
+    /**
+     * @return array{0: int|null, 1: int|null}
+     */
     public function getSortFieldChangeSet(MetadataArgs $args): array
     {
         $uow = $this->em->getUnitOfWork();
+        /** @var array<string, array{0: mixed, 1: mixed}> $set */
         $set = $uow->getEntityChangeSet($entity = $args->entity);
         /** @var SortConfiguration $config */
         $config = $args->configuration;
+        $sortField = $config->getSortField();
 
-        if (isset($set[$sortField = $config->getSortField()])) {
+        if (isset($set[$sortField])) {
+            /** @var array{0: int|null, 1: int|null} */
             return $set[$sortField];
         }
 
-        return [$value = $args->classMetadata->getFieldValue($entity, $sortField), $value];
+        /** @var int|null $value */
+        $value = $args->getClassMetadata()->getFieldValue($entity, $sortField);
+
+        return [$value, $value];
     }
 
+    /**
+     * @return array{0: array<string, mixed>, 1: array<string, mixed>}
+     */
     public function getGroupingFieldChangeSet(MetadataArgs $args): array
     {
         $uow = $this->em->getUnitOfWork();
+        /** @var array<string, array{0: mixed, 1: mixed}> $set */
         $set = $uow->getEntityChangeSet($entity = $args->entity);
         /** @var SortConfiguration $config */
         $config = $args->configuration;
 
-        $oldCondition = $newCondition = [];
+        /** @var array<string, mixed> $oldCondition */
+        $oldCondition = [];
+        /** @var array<string, mixed> $newCondition */
+        $newCondition = [];
         foreach ($config->getGroupingFields() as $field) {
             if (isset($set[$field])) {
                 [$old, $new] = $set[$field];
@@ -53,7 +69,7 @@ readonly class DiffHelper
                 continue;
             }
 
-            $value = $args->classMetadata->getFieldValue($entity, $field);
+            $value = $args->getClassMetadata()->getFieldValue($entity, $field);
             $oldCondition[$field] = $newCondition[$field] = $value;
         }
 
@@ -63,6 +79,7 @@ readonly class DiffHelper
     public function hasChangedFields(MetadataArgs $args): bool
     {
         $uow = $this->em->getUnitOfWork();
+        /** @var array<string, array{0: mixed, 1: mixed}> $set */
         $set = $uow->getEntityChangeSet($args->entity);
         /** @var SortConfiguration $config */
         $config = $args->configuration;
@@ -71,7 +88,6 @@ readonly class DiffHelper
             return true;
         }
 
-        return \array_any($config->getGroupingFields(), fn($field) => isset($set[$field]));
-
+        return \array_any($config->getGroupingFields(), fn (string $field) => isset($set[$field]));
     }
 }

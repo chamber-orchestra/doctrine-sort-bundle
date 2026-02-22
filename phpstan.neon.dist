@@ -1,0 +1,11 @@
+parameters:
+    level: max
+    paths:
+        - src
+    ignoreErrors:
+        - identifier: trait.unused
+        - identifier: missingType.generics
+        - identifier: missingType.iterableValue
+        -
+            identifier: argument.type
+            message: '#ObjectManager given#'
