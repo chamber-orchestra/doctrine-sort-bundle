@@ -70,10 +70,10 @@ readonly class Collector
         $config = $args->configuration;
         $er = $this->factory->getRepository($meta, $config);
 
-        $maxOrder = $er->getMaxSortOrder($condition);
+        $nextPosition = $er->getMaxSortOrder($condition);
 
         return (null === $order || 0 === $order)
-            ? $maxOrder + 1
-            : \max(1, \min($maxOrder + 1, $order));
+            ? $nextPosition
+            : \max(1, \min($nextPosition, $order));
     }
 }

@@ -2,6 +2,13 @@
 
 declare(strict_types=1);
 
+/*
+ * This file is part of the ChamberOrchestra package.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Tests\Integrational;
 
 use ChamberOrchestra\DoctrineSortBundle\Mapping\Configuration\SortConfiguration;
@@ -32,7 +39,7 @@ final class SortComponentsIntegrationTest extends IntegrationTestCase
         $factory = new RepositoryFactory($em);
         $repository = $factory->getRepository($em->getClassMetadata(GroupedSortableEntity::class), $config);
 
-        self::assertSame(2, $repository->getMaxSortOrder(['category' => 'a'], false));
+        self::assertSame(3, $repository->getMaxSortOrder(['category' => 'a']));
 
         $collection = $repository->getCollection(['category' => 'a'], 1, 2);
         self::assertCount(2, $collection);

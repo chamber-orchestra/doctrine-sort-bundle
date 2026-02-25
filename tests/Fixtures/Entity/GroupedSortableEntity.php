@@ -2,6 +2,13 @@
 
 declare(strict_types=1);
 
+/*
+ * This file is part of the ChamberOrchestra package.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Tests\Fixtures\Entity;
 
 use ChamberOrchestra\DoctrineSortBundle\Contracts\Entity\SortInterface;
@@ -61,7 +68,7 @@ class GroupedSortableEntity implements SortInterface
 
     public function moveDown(): void
     {
-        $this->sortOrder = $this->sortOrder + 1;
+        ++$this->sortOrder;
     }
 
     public function moveToBeginning(): void

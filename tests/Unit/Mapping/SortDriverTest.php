@@ -2,8 +2,16 @@
 
 declare(strict_types=1);
 
+/*
+ * This file is part of the ChamberOrchestra package.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Tests\Unit\Mapping;
 
+use ChamberOrchestra\DoctrineSortBundle\Entity\SortTrait;
 use ChamberOrchestra\DoctrineSortBundle\Mapping\Attribute\Sort;
 use ChamberOrchestra\DoctrineSortBundle\Mapping\Configuration\SortConfiguration;
 use ChamberOrchestra\DoctrineSortBundle\Mapping\Driver\SortDriver;
@@ -40,6 +48,24 @@ class SortDriverMissingPropertyEntity
     #[ORM\Column(type: 'integer')]
     #[Sort(groupBy: ['missing'])]
     public int $sortOrder;
+}
+
+#[ORM\Entity]
+#[ORM\InheritanceType('SINGLE_TABLE')]
+#[ORM\DiscriminatorColumn(name: 'type', type: 'string')]
+#[ORM\DiscriminatorMap(['parent' => SortDriverStiParentEntity::class, 'child' => SortDriverStiChildEntity::class])]
+class SortDriverStiParentEntity
+{
+    use SortTrait;
+
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    public int $id;
+}
+
+#[ORM\Entity]
+class SortDriverStiChildEntity extends SortDriverStiParentEntity
+{
 }
 
 #[ORM\Entity]
@@ -95,6 +121,23 @@ final class SortDriverTest extends TestCase
         $this->expectException(MappingException::class);
 
         $driver->loadMetadataForClass($extension);
+    }
+
+    public function testStiWithTraitResolvesToRootEntity(): void
+    {
+        $metadata = $this->createMetadata(SortDriverStiChildEntity::class);
+        $metadata->inheritanceType = ClassMetadata::INHERITANCE_TYPE_SINGLE_TABLE;
+        $metadata->rootEntityName = SortDriverStiParentEntity::class;
+
+        $extension = new ExtensionMetadata($metadata);
+
+        $driver = new SortDriver(new AttributeReader());
+        $driver->loadMetadataForClass($extension);
+
+        $config = $extension->getConfiguration(SortConfiguration::class);
+
+        self::assertInstanceOf(SortConfiguration::class, $config);
+        self::assertSame(SortDriverStiParentEntity::class, $config->getEntityName());
     }
 
     private function createMetadata(string $class): ClassMetadata

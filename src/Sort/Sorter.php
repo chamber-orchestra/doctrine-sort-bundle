@@ -52,7 +52,7 @@ readonly class Sorter
         foreach ($range->getDeletions() as $deletion) {
             $deleteIds[$deletion->id] = true;
         }
-        $vector = $vector->filter(fn (Pair $pair): bool => !isset($deleteIds[$pair->id]));
+        $vector = $vector->filter(static fn (Pair $pair): bool => !isset($deleteIds[$pair->id]));
 
         $base = \max(1, $range->getMin());
         $length = \count($vector);

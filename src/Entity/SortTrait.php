@@ -37,7 +37,7 @@ trait SortTrait
 
     public function moveDown(): void
     {
-        $this->sortOrder = $this->sortOrder + 1;
+        ++$this->sortOrder;
     }
 
     public function moveToBeginning(): void
