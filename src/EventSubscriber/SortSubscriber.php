@@ -115,7 +115,7 @@ class SortSubscriber extends AbstractDoctrineListener
 
     private function getRepositoryFactory(ObjectManager $em): RepositoryFactory
     {
-        return $this->repositoryFactory[\get_class($em)] ??= new RepositoryFactory($em);
+        return $this->repositoryFactory[$em::class] ??= new RepositoryFactory($em);
     }
 
     private function getCollector(ManagerEventArgs $args): Collector

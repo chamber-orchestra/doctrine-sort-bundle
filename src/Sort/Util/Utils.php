@@ -27,6 +27,8 @@ class Utils
                 $parts[] = 'o:'.\spl_object_hash($value);
             } elseif (\is_scalar($value)) {
                 $parts[] = 's:'.$value;
+            } else {
+                throw new \InvalidArgumentException(\sprintf('Unsupported condition value type: %s', \get_debug_type($value)));
             }
         }
 

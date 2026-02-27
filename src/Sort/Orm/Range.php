@@ -64,7 +64,7 @@ class Range
     public function getDeletions(): array
     {
         $values = $this->deletions;
-        \usort($values, fn (Pair $a, Pair $b): int => $b->order <=> $a->order);
+        \usort($values, static fn (Pair $a, Pair $b): int => $b->order <=> $a->order);
 
         return $values;
     }
@@ -75,7 +75,7 @@ class Range
     public function getInsertions(): array
     {
         $values = $this->insertions;
-        \usort($values, fn (Pair $a, Pair $b): int => $a->order <=> $b->order);
+        \usort($values, static fn (Pair $a, Pair $b): int => $a->order <=> $b->order);
 
         return $values;
     }

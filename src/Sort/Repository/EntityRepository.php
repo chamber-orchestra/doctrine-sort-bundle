@@ -40,20 +40,22 @@ class EntityRepository
         $this->identifierField = $identifiers[0];
     }
 
-    public function getMaxSortOrder(array $condition, bool $increase = true): int
+    public function getMaxSortOrder(array $condition): int
     {
-        if (isset($this->maxSortOrder[$hash = Utils::hash($condition)])) {
-            return $increase ? ++$this->maxSortOrder[$hash] : $this->maxSortOrder[$hash];
+        $hash = Utils::hash($condition);
+
+        if (!isset($this->maxSortOrder[$hash])) {
+            $qb = $this->createQueryBuilder('n');
+            $qb
+                ->select(\sprintf('MAX(n.%s)', $this->configuration->getSortField()))
+                ->setMaxResults(1);
+
+            $this->addGroupingCondition($qb, $condition);
+
+            $this->maxSortOrder[$hash] = (int) $qb->getQuery()->getSingleScalarResult();
         }
 
-        $qb = $this->createQueryBuilder('n');
-        $qb
-            ->select(\sprintf('MAX(n.%s)', $this->configuration->getSortField()))
-            ->setMaxResults(1);
-
-        $this->addGroupingCondition($qb, $condition);
-
-        return $this->maxSortOrder[$hash] = (int) $qb->getQuery()->getSingleScalarResult();
+        return ++$this->maxSortOrder[$hash];
     }
 
     /**

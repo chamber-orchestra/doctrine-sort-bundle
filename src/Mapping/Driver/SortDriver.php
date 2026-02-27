@@ -84,7 +84,8 @@ class SortDriver extends AbstractMappingDriver
 
         $declaringEntityName = $entityName;
         if ($inheritanceType !== $meta::INHERITANCE_TYPE_NONE) {
-            if (\is_a($rootEntityName, $sortProperty->getDeclaringClass()->getName(), true)) {
+            $rootReflection = new \ReflectionClass($rootEntityName);
+            if ($rootReflection->hasProperty($sortProperty->getName())) {
                 $declaringEntityName = $rootEntityName;
             }
         }

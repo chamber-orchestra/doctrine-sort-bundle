@@ -2,6 +2,13 @@
 
 declare(strict_types=1);
 
+/*
+ * This file is part of the ChamberOrchestra package.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Tests\Unit\EventSubscriber;
 
 use ChamberOrchestra\DoctrineSortBundle\EventSubscriber\SortSubscriber;
@@ -78,7 +85,7 @@ final class SortSubscriberTest extends TestCase
         $map->getChangeSet($args);
 
         $subscriber = new SortSubscriber();
-        $this->setPrivateProperty($subscriber, 'changeSetMaps', [\get_class($em) => $map]);
+        $this->setPrivateProperty($subscriber, 'changeSetMaps', [$em::class => $map]);
 
         $subscriber->postFlush(new PostFlushEventArgs($em));
     }
@@ -94,9 +101,7 @@ final class SortSubscriberTest extends TestCase
 
     private function getPrivateProperty(object $subject, string $property): mixed
     {
-        $getter = function (string $property): mixed {
-            return $this->{$property};
-        };
+        $getter = fn (string $property): mixed => $this->{$property};
 
         return $getter->bindTo($subject, $subject::class)($property);
     }
