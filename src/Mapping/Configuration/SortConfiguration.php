@@ -63,7 +63,7 @@ class SortConfiguration extends AbstractMetadataConfiguration implements EntityN
     {
         $this->assertMapped();
 
-        /* @var array{groupBy: list<string>, evictCollections: list<array{0: string, 1: string}>, evictRegions: list<string>, entityName: string, sort: true} */
+        /** @var array{groupBy: list<string>, evictCollections: list<array{0: string, 1: string}>, evictRegions: list<string>, entityName: string, sort: true} */
         return \current($this->mappings);
     }
 
