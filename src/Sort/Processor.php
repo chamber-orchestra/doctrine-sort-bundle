@@ -71,8 +71,10 @@ readonly class Processor
         /** @var array<int|string, object> $map */
         $map = [];
         foreach ($result as $entity) {
-            /** @var int|string $id */
             $id = $meta->getFieldValue($entity, $idField);
+            if ($id instanceof \Stringable) {
+                $id = (string) $id;
+            }
             $map[$id] = $entity;
         }
 

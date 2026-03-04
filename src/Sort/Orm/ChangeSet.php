@@ -53,16 +53,25 @@ class ChangeSet implements \IteratorAggregate
 
     public function addInsertion(object $entity, int $index, array $condition): void
     {
-        /** @var int|string $id */
-        $id = $this->getClassMetadata()->getFieldValue($entity, $this->identifierField);
+        $id = $this->resolveId($entity);
         $this->getSet($condition)->addInsertion(new Pair($id, $index));
     }
 
     public function addDeletion(object $entity, int $index, array $condition): void
     {
-        /** @var int|string $id */
-        $id = $this->getClassMetadata()->getFieldValue($entity, $this->identifierField);
+        $id = $this->resolveId($entity);
         $this->getSet($condition)->addDeletion(new Pair($id, $index));
+    }
+
+    private function resolveId(object $entity): int|string
+    {
+        $id = $this->getClassMetadata()->getFieldValue($entity, $this->identifierField);
+
+        if ($id instanceof \Stringable) {
+            return (string) $id;
+        }
+
+        return $id;
     }
 
     /**
