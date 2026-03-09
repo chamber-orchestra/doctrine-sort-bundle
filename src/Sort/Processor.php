@@ -74,6 +74,8 @@ readonly class Processor
             $id = $meta->getFieldValue($entity, $idField);
             if ($id instanceof \Stringable) {
                 $id = (string) $id;
+            } elseif (!\is_int($id) && !\is_string($id)) {
+                throw new RuntimeException(\sprintf('Entity identifier must be int, string or Stringable, got "%s".', get_debug_type($id)));
             }
             $map[$id] = $entity;
         }
