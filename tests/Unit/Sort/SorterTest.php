@@ -19,7 +19,7 @@ use ChamberOrchestra\DoctrineSortBundle\Sort\RepositoryFactory;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Sorter;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\Mapping\RuntimeReflectionService;
-use Ds\Vector;
+use Ds\Seq;
 use PHPUnit\Framework\TestCase;
 
 class SorterEntity
@@ -57,7 +57,7 @@ final class SorterTest extends TestCase
         $changeSet->addInsertion(new SorterEntity(3), 1, []);
 
         $repo = $this->createStub(EntityRepository::class);
-        $repo->method('getCollection')->willReturn(new Vector([
+        $repo->method('getCollection')->willReturn(new Seq([
             new Pair(1, 1),
             new Pair(2, 2),
         ]));

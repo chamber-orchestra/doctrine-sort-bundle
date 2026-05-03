@@ -2,6 +2,8 @@ parameters:
     level: max
     paths:
         - src
+    stubFiles:
+        - stubs/Ds.stub
     ignoreErrors:
         - identifier: trait.unused
         - identifier: missingType.generics
