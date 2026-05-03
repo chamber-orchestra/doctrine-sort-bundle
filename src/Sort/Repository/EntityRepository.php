@@ -18,7 +18,7 @@ use ChamberOrchestra\DoctrineSortBundle\Sort\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\Mapping\ClassMetadata;
-use Ds\Vector;
+use Ds\Seq;
 
 class EntityRepository
 {
@@ -59,9 +59,9 @@ class EntityRepository
     }
 
     /**
-     * @return Vector<Pair>
+     * @return Seq<Pair>
      */
-    public function getCollection(array $condition, int $min, int $max): Vector
+    public function getCollection(array $condition, int $min, int $max): Seq
     {
         $idField = $this->identifierField;
         $field = $this->configuration->getSortField();
@@ -79,7 +79,7 @@ class EntityRepository
         /** @var list<Pair> $result */
         $result = $qb->getQuery()->useQueryCache(true)->getResult();
 
-        return new Vector($result);
+        return new Seq($result);
     }
 
     private function createQueryBuilder(string $alias): QueryBuilder

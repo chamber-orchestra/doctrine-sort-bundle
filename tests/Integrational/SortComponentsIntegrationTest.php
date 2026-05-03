@@ -22,7 +22,7 @@ use ChamberOrchestra\DoctrineSortBundle\Sort\RepositoryFactory;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Sorter;
 use ChamberOrchestra\MetadataBundle\Helper\MetadataArgs;
 use ChamberOrchestra\MetadataBundle\Mapping\MetadataReader;
-use Ds\Vector;
+use Ds\Seq;
 use Tests\Fixtures\Entity\GroupedSortableEntity;
 
 final class SortComponentsIntegrationTest extends IntegrationTestCase
@@ -81,7 +81,7 @@ final class SortComponentsIntegrationTest extends IntegrationTestCase
         $changeSet = new ChangeSet($em->getClassMetadata(GroupedSortableEntity::class), $config);
 
         $processor = new Processor();
-        $processor->setCorrectOrder($em, $changeSet, new Vector([new Pair($entity->getId(), 4)]));
+        $processor->setCorrectOrder($em, $changeSet, new Seq([new Pair($entity->getId(), 4)]));
 
         self::assertSame(4, $entity->getSortOrder());
     }

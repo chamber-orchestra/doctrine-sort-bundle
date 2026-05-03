@@ -35,8 +35,8 @@
   ],
   "require": {
     "php": "^8.5",
-    "chamber-orchestra/metadata-bundle": "8.0.*",
-    "php-ds/php-ds": "^1.7"
+    "ext-ds": "^2.0",
+    "chamber-orchestra/metadata-bundle": "8.0.*"
   },
   "require-dev": {
     "phpunit/phpunit": "^13.0",

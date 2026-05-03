@@ -16,14 +16,14 @@ use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\ChangeSet;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Pair;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Ds\Vector;
+use Ds\Seq;
 
 readonly class Processor
 {
     /**
-     * @param Vector<Pair> $vector
+     * @param Seq<Pair> $vector
      */
-    public function setCorrectOrder(EntityManagerInterface $em, ChangeSet $set, Vector $vector): void
+    public function setCorrectOrder(EntityManagerInterface $em, ChangeSet $set, Seq $vector): void
     {
         if ($vector->isEmpty()) {
             return;
@@ -50,11 +50,11 @@ readonly class Processor
     }
 
     /**
-     * @param Vector<Pair> $vector
+     * @param Seq<Pair> $vector
      *
      * @return array<int|string, object>
      */
-    private function loadEntities(EntityManagerInterface $em, ClassMetadata $meta, string $idField, Vector $vector): array
+    private function loadEntities(EntityManagerInterface $em, ClassMetadata $meta, string $idField, Seq $vector): array
     {
         /** @var list<int|string> $ids */
         $ids = [];
