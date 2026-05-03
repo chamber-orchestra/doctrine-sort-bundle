@@ -63,6 +63,8 @@ readonly class Sorter
 
         /** @var Seq<Pair> $result */
         $result = new Seq();
+        /** @var int $order */
+        /** @var Pair $value */
         foreach ($vector as $order => $value) {
             $result[] = new Pair($value->id, $order + $base);
         }
