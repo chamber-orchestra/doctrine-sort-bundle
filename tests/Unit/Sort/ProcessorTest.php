@@ -19,7 +19,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\Persistence\Mapping\RuntimeReflectionService;
-use Ds\Vector;
+use Ds\Seq;
 use PHPUnit\Framework\TestCase;
 
 class ProcessorEntity
@@ -63,7 +63,7 @@ final class ProcessorTest extends TestCase
         $em->method('getUnitOfWork')->willReturn($uow);
         $em->method('createQuery')->willReturn($query);
 
-        $vector = new Vector([new Pair(1, 5)]);
+        $vector = new Seq([new Pair(1, 5)]);
 
         $processor = new Processor();
         $processor->setCorrectOrder($em, $changeSet, $vector);

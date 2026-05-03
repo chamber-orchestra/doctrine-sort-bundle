@@ -1,0 +1,117 @@
+<?php
+
+namespace Ds;
+
+use ArrayAccess;
+use Countable;
+use IteratorAggregate;
+use JsonSerializable;
+
+/**
+ * @template TValue
+ *
+ * @implements IteratorAggregate<int, TValue>
+ * @implements ArrayAccess<int, TValue>
+ */
+final class Seq implements IteratorAggregate, Countable, JsonSerializable, ArrayAccess
+{
+    /**
+     * @param iterable<TValue> $values
+     */
+    public function __construct(iterable $values = []) {}
+
+    /**
+     * @return Seq<TValue>
+     */
+    public function copy(): Seq {}
+
+    /**
+     * @return Seq<TValue>
+     */
+    public function reversed(): Seq {}
+
+    /**
+     * @return Seq<TValue>
+     */
+    public function slice(int $offset, ?int $length = null): Seq {}
+
+    /**
+     * @param (callable(TValue, TValue): int)|null $comparator
+     * @return Seq<TValue>
+     */
+    public function sorted(?callable $comparator = null): Seq {}
+
+    /**
+     * @param (callable(TValue): bool)|null $callback
+     * @return Seq<TValue>
+     */
+    public function filter(?callable $callback = null): Seq {}
+
+    /**
+     * @template TNewValue
+     * @param callable(TValue): TNewValue $callback
+     * @return Seq<TNewValue>
+     */
+    public function map(callable $callback): Seq {}
+
+    /**
+     * @template TValue2
+     * @param iterable<TValue2> $values
+     * @return Seq<TValue|TValue2>
+     */
+    public function merge(iterable $values): Seq {}
+
+    /**
+     * @param TValue ...$values
+     */
+    public function insert(int $index, ...$values): void {}
+
+    /**
+     * @param TValue ...$values
+     */
+    public function push(...$values): void {}
+
+    /**
+     * @return TValue
+     */
+    public function pop() {}
+
+    /**
+     * @return TValue
+     */
+    public function shift() {}
+
+    /**
+     * @param TValue ...$values
+     */
+    public function unshift(...$values): void {}
+
+    /**
+     * @return TValue
+     */
+    public function get(int $index) {}
+
+    /**
+     * @return TValue
+     */
+    public function first() {}
+
+    /**
+     * @return TValue
+     */
+    public function last() {}
+
+    public function isEmpty(): bool {}
+
+    public function count(): int {}
+
+    /**
+     * @return array<int, TValue>
+     */
+    public function toArray(): array {}
+
+    /**
+     * @return \Traversable<int, TValue>
+     */
+    public function getIterator(): \Traversable {}
+}

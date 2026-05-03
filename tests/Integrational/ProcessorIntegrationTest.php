@@ -16,7 +16,7 @@ use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\ChangeSet;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Orm\Pair;
 use ChamberOrchestra\DoctrineSortBundle\Sort\Processor;
 use ChamberOrchestra\MetadataBundle\Mapping\MetadataReader;
-use Ds\Vector;
+use Ds\Seq;
 use Tests\Fixtures\Entity\GroupedSortableEntity;
 
 final class ProcessorIntegrationTest extends IntegrationTestCase
@@ -35,7 +35,7 @@ final class ProcessorIntegrationTest extends IntegrationTestCase
 
         $this->expectException(\RuntimeException::class);
 
-        $processor->setCorrectOrder($em, $changeSet, new Vector([new Pair(999, 1)]));
+        $processor->setCorrectOrder($em, $changeSet, new Seq([new Pair(999, 1)]));
     }
 
     private function getSortConfiguration($em, string $class): SortConfiguration
