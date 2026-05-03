@@ -60,6 +60,9 @@
   "conflict": {
     "symfony/symfony": "*"
   },
+  "replace": {
+    "doctrine/annotations": "*"
+  },
   "extra": {
     "symfony": {
       "allow-contrib": false,
