@@ -34,6 +34,7 @@ readonly class Sorter
         foreach ($set as $update) {
             foreach ($update->getRanges() as $range) {
                 $vector = $er->getCollection($update->getCondition(), $range->getMin(), $range->getMax());
+                /** @var Seq<Pair> $result */
                 $result = $result->merge($this->applyChanges($vector, $range));
             }
         }
