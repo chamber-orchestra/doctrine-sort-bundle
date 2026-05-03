@@ -23,4 +23,12 @@ final class PairTest extends TestCase
         self::assertSame(10, $pair->id);
         self::assertSame(2, $pair->order);
     }
+
+    public function testPairAcceptsStringId(): void
+    {
+        $pair = new Pair('018f9d4a-0f1c-7c3a-9f1a-1234567890ab', 5);
+
+        self::assertSame('018f9d4a-0f1c-7c3a-9f1a-1234567890ab', $pair->id);
+        self::assertSame(5, $pair->order);
+    }
 }
