@@ -100,7 +100,7 @@ When writing tests, follow existing patterns: unit tests under `tests/Unit/` mir
 
 ## Dependencies
 
-- Requires PHP 8.5, Symfony 8.0 components, `chamber-orchestra/metadata-bundle` 8.0, and `php-ds/php-ds` ^1.7
+- Requires PHP 8.5, Symfony 8.2 components, `chamber-orchestra/metadata-bundle` 8.0, and `php-ds/php-ds` ^1.7
 - Doctrine ORM 3.6+ and DoctrineBundle 2.8+ (implicit via metadata-bundle)
 - Main branch is `main`
 

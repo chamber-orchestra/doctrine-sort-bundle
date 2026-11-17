@@ -36,7 +36,7 @@
   "require": {
     "php": "^8.5",
     "ext-ds": "^2.0",
-    "chamber-orchestra/metadata-bundle": "8.1.*"
+    "chamber-orchestra/metadata-bundle": "8.2.*"
   },
   "require-dev": {
     "phpunit/phpunit": "^13.3",
@@ -44,7 +44,8 @@
     "phpbench/phpbench": "^1.7",
     "phpstan/phpstan": "^2.2",
     "phpstan/phpstan-doctrine": "^2.0.28",
-    "friendsofphp/php-cs-fixer": "^3.95"
+    "friendsofphp/php-cs-fixer": "^3.95",
+    "doctrine/orm-plugin-second-level-cache": "^1.0"
   },
   "autoload": {
     "psr-4": {
@@ -56,14 +57,14 @@
       "Tests\\": "tests/"
     }
   },
-  "minimum-stability": "stable",
+  "minimum-stability": "beta",
   "conflict": {
     "symfony/symfony": "*"
   },
   "extra": {
     "symfony": {
       "allow-contrib": false,
-      "require": "8.1.*"
+      "require": "8.2.*"
     }
   },
   "config": {
@@ -77,5 +78,6 @@
     "analyse": "vendor/bin/phpstan analyse --memory-limit=512M",
     "cs-check": "vendor/bin/php-cs-fixer fix --dry-run --diff",
     "cs-fix": "vendor/bin/php-cs-fixer fix"
-  }
+  },
+  "prefer-stable": true
 }
